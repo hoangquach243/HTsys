@@ -1,0 +1,1232 @@
+
+> api@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m9:29:44 PM[0m] Starting compilation in watch mode...
+
+[[90m9:29:47 PM[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 27236  - [39m02/28/2026, 9:29:47 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[31m[Nest] 27236  - [39m02/28/2026, 9:29:48 PM [31m  ERROR[39m [38;5;3m[ExceptionHandler] [39mPrismaClientInitializationError: `PrismaClient` needs to be constructed with a non-empty, valid `PrismaClientOptions`:
+
+```
+new PrismaClient({
+  ...
+})
+```
+
+or
+
+```
+constructor() {
+  super({ ... });
+}
+```
+          
+    at new t (/Users/quachnguyenhoang/HTsys/apps/node_modules/[4m@prisma/client[24m/runtime/client.js:74:960)
+    at new PrismaService [90m(/Users/quachnguyenhoang/HTsys/apps/api/[39msrc/prisma/prisma.service.ts:5:8[90m)[39m
+    at Injector.instantiateClass (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/injector.js:422:19)
+    at callback (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/injector.js:70:45)
+    at async Injector.resolveConstructorParams (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/injector.js:170:24)
+    at async Injector.loadInstance (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/injector.js:75:13)
+    at async Injector.loadProvider (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/injector.js:103:9)
+    at async /Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/instance-loader.js:56:13
+    at async Promise.all (index 3)
+    at async InstanceLoader.createInstancesOfProviders (/Users/quachnguyenhoang/HTsys/node_modules/[4m@nestjs/core[24m/injector/instance-loader.js:55:9) {
+  clientVersion: [32m'7.4.2'[39m,
+  errorCode: [90mundefined[39m,
+  retryable: [90mundefined[39m
+}
+[2J[3J[H[[90m9:34:16 PM[0m] File change detected. Starting incremental compilation...
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:34:17 PM[0m] Found 18 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:34:17 PM[0m] File change detected. Starting incremental compilation...
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:34:17 PM[0m] Found 18 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:34:21 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:34:21 PM[0m] Found 19 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:34:25 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:34:25 PM[0m] Found 19 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:35:01 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:35:03 PM[0m] Found 19 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:35:04 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'BookingStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/bookings/dto/bookings.dto.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PaymentStatus'.
+
+[7m1[0m import { BookingStatus, PaymentStatus } from '@prisma/client';
+[7m [0m [91m                        ~~~~~~~~~~~~~[0m
+
+[96msrc/modules/finance/finance.service.ts[0m:[93m36[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'tx' implicitly has an 'any' type.
+
+[7m36[0m         return this.prisma.$transaction(async (tx) => {
+[7m  [0m [91m                                               ~~[0m
+
+[96msrc/modules/guests/dto/guests.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'Gender'.
+
+[7m1[0m import { Gender } from '@prisma/client';
+[7m [0m [91m         ~~~~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m47[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                              ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m21[0m:[93m52[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m21[0m         const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                   ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m49[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m22[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m22[0m         const totalCollected = bookings.reduce((sum, b) => sum + b.paidAmount, 0);
+[7m  [0m [91m                                                     ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m48[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                               ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m33[0m:[93m53[0m - [91merror[0m[90m TS7006: [0mParameter 'e' implicitly has an 'any' type.
+
+[7m33[0m         const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+[7m  [0m [91m                                                    ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m54[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                     ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m58[0m:[93m59[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m58[0m         const totalRoomNightsSold = bookings.reduce((sum, b) => sum + b.nights, 0);
+[7m  [0m [91m                                                          ~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'sum' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                  ~~~[0m
+
+[96msrc/modules/reports/reports.service.ts[0m:[93m59[0m:[93m56[0m - [91merror[0m[90m TS7006: [0mParameter 'b' implicitly has an 'any' type.
+
+[7m59[0m         const totalRoomRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+[7m  [0m [91m                                                       ~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PricingMode'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~~[0m
+
+[96msrc/modules/services/dto/services.dto.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'ServiceType'.
+
+[7m1[0m import { PricingMode, ServiceType } from '@prisma/client';
+[7m [0m [91m                      ~~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskStatus'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m         ~~~~~~~~~~[0m
+
+[96msrc/modules/tasks/dto/tasks.dto.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'TaskType'.
+
+[7m1[0m import { TaskStatus, TaskType } from '@prisma/client';
+[7m [0m [91m                     ~~~~~~~~[0m
+
+[[90m9:35:04 PM[0m] Found 19 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:36:34 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[[90m9:36:37 PM[0m] Found 1 error. Watching for file changes.
+
+[2J[3J[H[[90m9:36:38 PM[0m] File change detected. Starting incremental compilation...
+
+[96mprisma.config.ts[0m:[93m4[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'prisma/config' or its corresponding type declarations.
+
+[7m4[0m import { defineConfig } from "prisma/config";
+[7m [0m [91m                             ~~~~~~~~~~~~~~~[0m
+
+[[90m9:36:38 PM[0m] Found 1 error. Watching for file changes.
+
+[2J[3J[H[[90m9:36:56 PM[0m] File change detected. Starting incremental compilation...
+
+[[90m9:36:56 PM[0m] Found 0 errors. Watching for file changes.
+
+node:internal/modules/cjs/loader:1386
+  throw err;
+  ^
+
+Error: Cannot find module './jwt.strategy'
+Require stack:
+- /Users/quachnguyenhoang/HTsys/apps/api/dist/src/modules/auth/auth.module.js
+- /Users/quachnguyenhoang/HTsys/apps/api/dist/src/app.module.js
+- /Users/quachnguyenhoang/HTsys/apps/api/dist/src/main.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (/Users/quachnguyenhoang/HTsys/apps/api/src/modules/auth/auth.module.ts:7:1)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/quachnguyenhoang/HTsys/apps/api/dist/src/modules/auth/auth.module.js',
+    '/Users/quachnguyenhoang/HTsys/apps/api/dist/src/app.module.js',
+    '/Users/quachnguyenhoang/HTsys/apps/api/dist/src/main.js'
+  ]
+}
+
+Node.js v22.21.1
+[2J[3J[H[[90m9:41:50 PM[0m] File change detected. Starting incremental compilation...
+
+[[90m9:41:53 PM[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:55 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +403ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +6ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +4ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomsModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mBookingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTasksModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mGuestsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mServicesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mFinanceModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mReportsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAutomationModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mOtaModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mSettingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api}:[39m[38;5;3m +38ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/test-flow, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/login, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/register, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/refresh, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/profile, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomsController {/api/rooms}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, DELETE} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/rate-plans/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mBookingsController {/api/bookings}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id/payments, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTasksController {/api/tasks}:[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/all, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/new, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mGuestsController {/api/guests}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mServicesController {/api/services}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:bookingId, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:usageId, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mFinanceController {/api/finance}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mReportsController {/api/reports}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/financial, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/operational, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAutomationController {/api/automation}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mOtaController {/api/ota}:[39m[38;5;3m +5ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, PATCH} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id/logs, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/webhook, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mSettingsController {/api/settings}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, GET} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, PATCH} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, PATCH} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +93ms[39m
+[31m[Nest] 29663  - [39m02/28/2026, 9:41:56 PM [31m  ERROR[39m [38;5;3m[NestApplication] [39m[31mError: listen EADDRINUSE: address already in use :::3001[39m[38;5;3m +2ms[39m
+node:net:1940
+    const ex = new UVExceptionWithHostPort(err, 'listen', address, port);
+               ^
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at ExpressAdapter.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/platform-express/adapters/express-adapter.js:127:32)
+    at /Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:188:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:178:16)
+    at async bootstrap (/Users/quachnguyenhoang/HTsys/apps/api/src/main.ts:27:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.21.1
+[2J[3J[H[[90m9:43:34 PM[0m] File change detected. Starting incremental compilation...
+
+[96msrc/app.controller.ts[0m:[93m27[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'code' does not exist in type '(Without<PropertyCreateInput, PropertyUncheckedCreateInput> & PropertyUncheckedCreateInput) | (Without<...> & PropertyCreateInput)'.
+
+[7m27[0m             code: 'GH-TEST',
+[7m  [0m [91m            ~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m4905[0m:[93m5[0m
+    [7m4905[0m     data: XOR<PropertyCreateInput, PropertyUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: PropertySelect<DefaultArgs> | null | undefined; omit?: PropertyOmit<DefaultArgs> | null | undefined; include?: PropertyInclude<...> | ... 1 more ... | undefined; data: (Without<...> & PropertyUncheckedCreateInput) | (Without<...> & PropertyCreateInput); }'
+
+[96msrc/app.controller.ts[0m:[93m43[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'capacity' does not exist in type 'Without<RoomTypeCreateInput, RoomTypeUncheckedCreateInput> & RoomTypeUncheckedCreateInput'.
+
+[7m43[0m             capacity: 2
+[7m  [0m [91m            ~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m7768[0m:[93m5[0m
+    [7m7768[0m     data: XOR<RoomTypeCreateInput, RoomTypeUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: RoomTypeSelect<DefaultArgs> | null | undefined; omit?: RoomTypeOmit<DefaultArgs> | null | undefined; include?: RoomTypeInclude<...> | ... 1 more ... | undefined; data: (Without<...> & RoomTypeUncheckedCreateInput) | (Without<...> & RoomTypeCreateInput); }'
+
+[96msrc/app.controller.ts[0m:[93m48[0m:[93m11[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'room'.
+
+[7m48[0m       let room = await this.prisma.room.findFirst({ where: { propertyId: property.id } });
+[7m  [0m [91m          ~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m48[0m:[93m62[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'propertyId' does not exist in type 'RoomWhereInput'.
+
+[7m48[0m       let room = await this.prisma.room.findFirst({ where: { propertyId: property.id } });
+[7m  [0m [91m                                                             ~~~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m53[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'propertyId' does not exist in type 'Without<RoomCreateInput, RoomUncheckedCreateInput> & RoomUncheckedCreateInput'.
+
+[7m53[0m             propertyId: property.id,
+[7m  [0m [91m            ~~~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m8971[0m:[93m5[0m
+    [7m8971[0m     data: XOR<RoomCreateInput, RoomUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: RoomSelect<DefaultArgs> | null | undefined; omit?: RoomOmit<DefaultArgs> | null | undefined; include?: RoomInclude<DefaultArgs> | null | undefined; data: (Without<...> & RoomUncheckedCreateInput) | (Without<...> & RoomCreateInput); }'
+
+[96msrc/app.controller.ts[0m:[93m61[0m:[93m11[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'service'.
+
+[7m61[0m       let service = await this.prisma.service.findFirst({ where: { propertyId: property.id } });
+[7m  [0m [91m          ~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m87[0m:[93m13[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'room'.
+
+[7m87[0m       const room = await this.prisma.room.findFirst({
+[7m  [0m [91m            ~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m95[0m:[93m33[0m - [91merror[0m[90m TS2551: [0mProperty 'roomType' does not exist on type '{ id: string; createdAt: Date; updatedAt: Date; roomNumber: string; floor: string | null; status: RoomStatus; notes: string | null; roomTypeId: string; }'. Did you mean 'roomTypeId'?
+
+[7m95[0m       const roomTypeName = room.roomType.name;
+[7m  [0m [91m                                ~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m109[0m:[93m29[0m - [91merror[0m[90m TS2551: [0mProperty 'roomType' does not exist on type '{ id: string; createdAt: Date; updatedAt: Date; roomNumber: string; floor: string | null; status: RoomStatus; notes: string | null; roomTypeId: string; }'. Did you mean 'roomTypeId'?
+
+[7m109[0m           totalAmount: room.roomType.basePrice,
+[7m   [0m [91m                            ~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m114[0m:[93m32[0m - [91merror[0m[90m TS2551: [0mProperty 'roomType' does not exist on type '{ id: string; createdAt: Date; updatedAt: Date; roomNumber: string; floor: string | null; status: RoomStatus; notes: string | null; roomTypeId: string; }'. Did you mean 'roomTypeId'?
+
+[7m114[0m               roomTypeId: room.roomType.id,
+[7m   [0m [91m                               ~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m117[0m:[93m27[0m - [91merror[0m[90m TS2551: [0mProperty 'roomType' does not exist on type '{ id: string; createdAt: Date; updatedAt: Date; roomNumber: string; floor: string | null; status: RoomStatus; notes: string | null; roomTypeId: string; }'. Did you mean 'roomTypeId'?
+
+[7m117[0m               price: room.roomType.basePrice
+[7m   [0m [91m                          ~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m134[0m:[93m11[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'service'.
+
+[7m134[0m       let service = await this.prisma.service.findFirst({ where: { propertyId: property.id } });
+[7m   [0m [91m          ~~~~~~~[0m
+
+[[90m9:43:37 PM[0m] Found 12 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:44:00 PM[0m] File change detected. Starting incremental compilation...
+
+[96msrc/app.controller.ts[0m:[93m27[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'code' does not exist in type '(Without<PropertyCreateInput, PropertyUncheckedCreateInput> & PropertyUncheckedCreateInput) | (Without<...> & PropertyCreateInput)'.
+
+[7m27[0m             code: 'GH-TEST',
+[7m  [0m [91m            ~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m4905[0m:[93m5[0m
+    [7m4905[0m     data: XOR<PropertyCreateInput, PropertyUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: PropertySelect<DefaultArgs> | null | undefined; omit?: PropertyOmit<DefaultArgs> | null | undefined; include?: PropertyInclude<...> | ... 1 more ... | undefined; data: (Without<...> & PropertyUncheckedCreateInput) | (Without<...> & PropertyCreateInput); }'
+
+[96msrc/app.controller.ts[0m:[93m43[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'capacity' does not exist in type 'Without<RoomTypeCreateInput, RoomTypeUncheckedCreateInput> & RoomTypeUncheckedCreateInput'.
+
+[7m43[0m             capacity: 2
+[7m  [0m [91m            ~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m7768[0m:[93m5[0m
+    [7m7768[0m     data: XOR<RoomTypeCreateInput, RoomTypeUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: RoomTypeSelect<DefaultArgs> | null | undefined; omit?: RoomTypeOmit<DefaultArgs> | null | undefined; include?: RoomTypeInclude<...> | ... 1 more ... | undefined; data: (Without<...> & RoomTypeUncheckedCreateInput) | (Without<...> & RoomTypeCreateInput); }'
+
+[96msrc/app.controller.ts[0m:[93m48[0m:[93m64[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'propertyId' does not exist in type 'RoomWhereInput'.
+
+[7m48[0m       let dbRoom = await this.prisma.room.findFirst({ where: { propertyId: property.id } });
+[7m  [0m [91m                                                               ~~~~~~~~~~[0m
+
+[96msrc/app.controller.ts[0m:[93m53[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'propertyId' does not exist in type 'Without<RoomCreateInput, RoomUncheckedCreateInput> & RoomUncheckedCreateInput'.
+
+[7m53[0m             propertyId: property.id,
+[7m  [0m [91m            ~~~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m8971[0m:[93m5[0m
+    [7m8971[0m     data: XOR<RoomCreateInput, RoomUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: RoomSelect<DefaultArgs> | null | undefined; omit?: RoomOmit<DefaultArgs> | null | undefined; include?: RoomInclude<DefaultArgs> | null | undefined; data: (Without<...> & RoomUncheckedCreateInput) | (Without<...> & RoomCreateInput); }'
+
+[[90m9:44:02 PM[0m] Found 4 errors. Watching for file changes.
+
+[2J[3J[H[[90m9:44:40 PM[0m] File change detected. Starting incremental compilation...
+
+[[90m9:44:41 PM[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:50 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +130ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +770ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomsModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mBookingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTasksModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mGuestsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mServicesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mFinanceModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mReportsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAutomationModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mOtaModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mSettingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api}:[39m[38;5;3m +41ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} route[39m[38;5;3m +7ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/test-flow, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/login, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/register, POST} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/refresh, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/profile, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomsController {/api/rooms}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, POST} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, PATCH} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, POST} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/rate-plans/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mBookingsController {/api/bookings}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id/payments, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTasksController {/api/tasks}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/all, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/new, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mGuestsController {/api/guests}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mServicesController {/api/services}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:bookingId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:usageId, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mFinanceController {/api/finance}:[39m[38;5;3m +4ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mReportsController {/api/reports}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/financial, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/operational, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAutomationController {/api/automation}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mOtaController {/api/ota}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id/logs, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/webhook, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mSettingsController {/api/settings}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:51 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 29941  - [39m02/28/2026, 9:44:52 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +794ms[39m
+[31m[Nest] 29941  - [39m02/28/2026, 9:44:52 PM [31m  ERROR[39m [38;5;3m[NestApplication] [39m[31mError: listen EADDRINUSE: address already in use :::3001[39m[38;5;3m +1ms[39m
+node:net:1940
+    const ex = new UVExceptionWithHostPort(err, 'listen', address, port);
+               ^
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at ExpressAdapter.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/platform-express/adapters/express-adapter.js:127:32)
+    at /Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:188:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:178:16)
+    at async bootstrap (/Users/quachnguyenhoang/HTsys/apps/api/src/main.ts:27:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.21.1
+[2J[3J[H[[90m9:46:08 PM[0m] File change detected. Starting incremental compilation...
+
+[[90m9:46:11 PM[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:12 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +73ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mBookingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTasksModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mGuestsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mServicesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mFinanceModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mReportsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAutomationModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mOtaModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mSettingsModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api}:[39m[38;5;3m +97ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/test-flow, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/login, POST} route[39m[38;5;3m +9ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/register, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/refresh, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/profile, GET} route[39m[38;5;3m +6ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomsController {/api/rooms}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, GET} route[39m[38;5;3m +12ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types, POST} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/types/:id/rate-plans, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/rooms/rate-plans/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mBookingsController {/api/bookings}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id/payments, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/bookings/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTasksController {/api/tasks}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/all, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/new, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tasks/templates/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mGuestsController {/api/guests}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guests/:id/labels/:labelId, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mServicesController {/api/services}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:bookingId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/services/usages/:usageId, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mFinanceController {/api/finance}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/payments, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/finance/expenses/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mReportsController {/api/reports}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/financial, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reports/operational, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAutomationController {/api/automation}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/templates/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/automation/flows/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mOtaController {/api/ota}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/mappings/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/channels/:id/logs, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/ota/webhook, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mSettingsController {/api/settings}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/property/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/payment-methods/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/bank-accounts/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/sources/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/settings/labels/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +319ms[39m
+[31m[Nest] 30221  - [39m02/28/2026, 9:46:13 PM [31m  ERROR[39m [38;5;3m[NestApplication] [39m[31mError: listen EADDRINUSE: address already in use :::3001[39m[38;5;3m +1ms[39m
+node:net:1940
+    const ex = new UVExceptionWithHostPort(err, 'listen', address, port);
+               ^
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at ExpressAdapter.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/platform-express/adapters/express-adapter.js:127:32)
+    at /Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:188:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/quachnguyenhoang/HTsys/node_modules/@nestjs/core/nest-application.js:178:16)
+    at async bootstrap (/Users/quachnguyenhoang/HTsys/apps/api/src/main.ts:27:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.21.1
