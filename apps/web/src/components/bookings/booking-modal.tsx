@@ -36,6 +36,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
     const [roomPrice, setRoomPrice] = useState<number>(500000);
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [nights, setNights] = useState<number>(1);
+    const [paidAmount, setPaidAmount] = useState<number>(0);
 
     // Alert Dialog State
     const [isConfirming, setIsConfirming] = useState(false);
@@ -115,6 +116,10 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
             }
 
             // 2. Create Booking
+            let paymentStatus = 'UNPAID';
+            if (paidAmount > 0 && paidAmount < totalAmount) paymentStatus = 'PARTIAL';
+            if (paidAmount >= totalAmount && totalAmount > 0) paymentStatus = 'PAID';
+
             const payload = {
                 guestId: finalGuestId,
                 propertyId: 'clouq2m1q00003b6w5z8s6xy9', // Using the correct property
@@ -122,6 +127,8 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
                 checkIn: new Date(checkIn).toISOString(),
                 checkOut: new Date(checkOut).toISOString(),
                 totalAmount: totalAmount,
+                paidAmount: paidAmount,
+                paymentStatus: paymentStatus,
                 rooms: initialData?.roomTypeId ? [{
                     roomTypeId: initialData.roomTypeId,
                     roomId: initialData.roomId,
@@ -214,8 +221,19 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
                                 <Input type="number" value={roomPrice || ''} onChange={e => setRoomPrice(Number(e.target.value))} required className="bg-zinc-900 border-zinc-800 text-zinc-100" />
                             </div>
                             <div className="space-y-2">
-                                <Label>Tổng tiền ({nights} đêm)</Label>
+                                <Label>Tổng tiền phòng ({nights} đêm)</Label>
                                 <Input readOnly type="text" value={totalAmount.toLocaleString('vi-VN')} className="bg-zinc-900 border-zinc-800 font-bold text-blue-400 cursor-not-allowed opacity-80" />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Trả trước / Cọc (VND)</Label>
+                                <Input type="number" value={paidAmount || ''} onChange={e => setPaidAmount(Number(e.target.value))} min="0" className="bg-zinc-900 border-zinc-700 focus:border-orange-500 text-orange-400 font-bold" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Còn lại (VND)</Label>
+                                <Input readOnly type="text" value={Math.max(0, totalAmount - paidAmount).toLocaleString('vi-VN')} className="bg-zinc-900 border-zinc-800 font-bold text-zinc-400 cursor-not-allowed opacity-80" />
                             </div>
                         </div>
 

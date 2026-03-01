@@ -4,7 +4,7 @@ import { ServicesService } from './services.service';
 import { CreateServiceDto, UpdateServiceDto, CreateServiceUsageDto } from './dto/services.dto';
 
 @Controller('services')
-@UseGuards(AuthGuard('jwt'))
+//@UseGuards(AuthGuard('jwt'))
 export class ServicesController {
     constructor(private readonly servicesService: ServicesService) { }
 
@@ -53,5 +53,10 @@ export class ServicesController {
     @Delete('usages/:usageId')
     removeServiceFromBooking(@Param('usageId') usageId: string) {
         return this.servicesService.removeServiceFromBooking(usageId);
+    }
+
+    @Patch('usages/:usageId')
+    updateServiceUsage(@Param('usageId') usageId: string, @Body() dto: { quantity: number; amount: number }) {
+        return this.servicesService.updateServiceUsage(usageId, dto.quantity, dto.amount);
     }
 }

@@ -6,6 +6,17 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Filter, Layers, Pl
 import { format, addDays, subDays, startOfDay, differenceInDays, isSameDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { BookingModal } from '@/components/bookings/booking-modal';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function CalendarPage() {
     const [startDate, setStartDate] = useState(startOfDay(new Date()));
@@ -25,6 +36,12 @@ export default function CalendarPage() {
     const [modalData, setModalData] = useState<any>(null);
     const [selectedBooking, setSelectedBooking] = useState<any>(null);
     const [editBookingData, setEditBookingData] = useState<any>({});
+
+    // Services State
+    const [availableServices, setAvailableServices] = useState<any[]>([]);
+    const [bookingServices, setBookingServices] = useState<any[]>([]);
+    const [newService, setNewService] = useState({ serviceId: '', quantity: 1, unitPrice: 0, customName: '' });
+    const [serviceToRemove, setServiceToRemove] = useState<{ id: string; amount: number } | null>(null);
 
     // Compute date range
     const dates = useMemo(() => {
@@ -46,6 +63,13 @@ export default function CalendarPage() {
 
                 setRoomTypes(Array.isArray(typesData) ? typesData : typesData.data || []);
                 setBookings(bookingsData.data || []);
+
+                // Fetch available services
+                const servicesRes = await fetch(`http://localhost:3001/api/services?propertyId=clouq2m1q00003b6w5z8s6xy9`);
+                if (servicesRes.ok) {
+                    const servData = await servicesRes.json();
+                    setAvailableServices(Array.isArray(servData) ? servData : servData.data || []);
+                }
             } catch (error) {
                 console.error("Failed to load calendar data", error);
             } finally {
@@ -124,13 +148,22 @@ export default function CalendarPage() {
     const handleToday = () => setStartDate(startOfDay(new Date()));
 
     const handleSelectBooking = (booking: any) => {
+        const bookingDate = new Date(booking.checkIn);
         setEditBookingData({
+            checkIn: format(bookingDate, "yyyy-MM-dd'T'HH:mm"),
+            checkOut: format(new Date(booking.checkOut), "yyyy-MM-dd'T'HH:mm"),
             status: booking.status,
             paymentStatus: booking.paymentStatus,
-            checkIn: format(new Date(booking.checkIn), "yyyy-MM-dd'T'HH:mm"),
-            checkOut: format(new Date(booking.checkOut), "yyyy-MM-dd'T'HH:mm"),
             totalAmount: booking.totalAmount
         });
+
+        // Load services for this booking
+        fetch(`http://localhost:3001/api/services/usages/${booking.id}`)
+            .then(res => res.json())
+            .then(data => {
+                setBookingServices(Array.isArray(data) ? data : data.data || []);
+            })
+            .catch(console.error);
         setSelectedBooking(booking);
     };
 
@@ -159,6 +192,162 @@ export default function CalendarPage() {
             }
         } catch (error) {
             alert("Lỗi mạng khi cập nhật");
+        }
+    };
+
+    const handleAddServiceUsage = async () => {
+        if (!newService.serviceId) {
+            alert("Vui lòng chọn một dịch vụ");
+            return;
+        }
+
+        let serviceIdToUse = newService.serviceId;
+
+        if (newService.serviceId === 'NEW_SERVICE') {
+            if (!newService.customName) {
+                alert("Vui lòng nhập tên dịch vụ mới");
+                return;
+            }
+            try {
+                const res = await fetch(`http://localhost:3001/api/services`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: newService.customName,
+                        price: newService.unitPrice,
+                        propertyId: 'clouq2m1q00003b6w5z8s6xy9',
+                        type: 'SERVICE'
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setAvailableServices([...availableServices, data]);
+                    serviceIdToUse = data.id;
+                } else {
+                    alert('Lỗi tạo dịch vụ');
+                    return;
+                }
+            } catch (e) {
+                alert('Lỗi mạng khi tạo dịch vụ');
+                return;
+            }
+        }
+
+        // Check if service already exists in bookingServices
+        const existingUsage = bookingServices.find(s => s.serviceId === serviceIdToUse && s.unitPrice === newService.unitPrice);
+        if (existingUsage) {
+            handleUpdateServiceQuantity(existingUsage.id, existingUsage.quantity + newService.quantity, existingUsage.unitPrice, existingUsage.amount);
+            setNewService({ serviceId: '', quantity: 1, unitPrice: 0, customName: '' });
+            return;
+        }
+
+        const amount = newService.unitPrice * newService.quantity;
+
+        try {
+            const res = await fetch(`http://localhost:3001/api/services/usages`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bookingId: selectedBooking.id,
+                    serviceId: serviceIdToUse,
+                    quantity: newService.quantity,
+                    unitPrice: newService.unitPrice,
+                    amount: amount,
+                    note: 'Thêm từ Lịch'
+                })
+            });
+
+            if (res.ok) {
+                // Update booking total
+                const patchRes = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        totalAmount: Number(editBookingData.totalAmount) + amount
+                    })
+                });
+
+                if (patchRes.ok) {
+                    setEditBookingData({ ...editBookingData, totalAmount: Number(editBookingData.totalAmount) + amount });
+
+                    // Reload usages
+                    const usagesRes = await fetch(`http://localhost:3001/api/services/usages/${selectedBooking.id}`);
+                    const newUsages = await usagesRes.json();
+                    setBookingServices(Array.isArray(newUsages) ? newUsages : newUsages.data || []);
+
+                    setNewService({ serviceId: '', quantity: 1, unitPrice: 0, customName: '' });
+                    refreshData();
+                    alert("Đã thêm dịch vụ");
+                }
+            } else {
+                alert("Lỗi khi thêm dịch vụ");
+            }
+        } catch (error) {
+            alert("Lỗi mạng");
+        }
+    };
+
+    const handleRemoveServiceUsage = async (usageId: string, usageAmount: number) => {
+        try {
+            const res = await fetch(`http://localhost:3001/api/services/usages/${usageId}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                const patchRes = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        totalAmount: Number(editBookingData.totalAmount) - usageAmount
+                    })
+                });
+
+                if (patchRes.ok) {
+                    setEditBookingData({ ...editBookingData, totalAmount: Number(editBookingData.totalAmount) - usageAmount });
+                    setBookingServices(bookingServices.filter(s => s.id !== usageId));
+                    refreshData();
+                }
+            } else {
+                alert("Lỗi khi xóa dịch vụ");
+            }
+        } catch (error) {
+            alert("Lỗi mạng");
+        }
+    };
+
+    const handleUpdateServiceQuantity = async (usageId: string, newQuantity: number, unitPrice: number, oldAmount: number) => {
+        if (newQuantity < 1) return;
+        const newAmount = newQuantity * unitPrice;
+        const diffAmount = newAmount - oldAmount;
+
+        try {
+            // Update the usage
+            const res = await fetch(`http://localhost:3001/api/services/usages/${usageId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity: newQuantity, amount: newAmount })
+            });
+
+            if (res.ok) {
+                // Update booking total
+                const patchRes = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        totalAmount: Number(editBookingData.totalAmount) + diffAmount
+                    })
+                });
+
+                if (patchRes.ok) {
+                    setEditBookingData({ ...editBookingData, totalAmount: Number(editBookingData.totalAmount) + diffAmount });
+                    setBookingServices(bookingServices.map(s => s.id === usageId ? { ...s, quantity: newQuantity, amount: newAmount } : s));
+                    refreshData();
+                }
+            } else {
+                alert("Lỗi khi cập nhật số lượng");
+            }
+        } catch (error) {
+            alert("Lỗi mạng");
         }
     };
 
@@ -411,101 +600,242 @@ export default function CalendarPage() {
                             <button onClick={() => setSelectedBooking(null)} className="text-zinc-400 hover:text-white">&times;</button>
                         </div>
 
-                        <div className="space-y-4 text-sm text-zinc-300">
-                            <div>
-                                <p><strong className="text-zinc-100">Mã Booking:</strong> {selectedBooking.code}</p>
-                                <p><strong className="text-zinc-100">Khách hàng:</strong> {selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</p>
-                                <p><strong className="text-zinc-100">Nguồn:</strong> <span className="uppercase">{selectedBooking.source}</span></p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
+                        <Tabs defaultValue="info" className="w-full text-sm">
+                            <TabsList className="grid w-full grid-cols-2 bg-zinc-900 mb-4 h-9 p-1">
+                                <TabsTrigger value="info" className="text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-white text-zinc-400">Thông tin chung</TabsTrigger>
+                                <TabsTrigger value="services" className="text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-white text-zinc-400">Dịch vụ bổ sung</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="info" className="space-y-4 text-zinc-300 mt-0 focus-visible:outline-none">
                                 <div>
-                                    <label className="block text-xs text-zinc-500 uppercase mb-1">Nhận phòng</label>
-                                    <input
-                                        type="datetime-local"
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white [color-scheme:dark]"
-                                        value={editBookingData.checkIn}
-                                        onChange={e => setEditBookingData({ ...editBookingData, checkIn: e.target.value })}
-                                    />
+                                    <p><strong className="text-zinc-100">Mã Booking:</strong> {selectedBooking.code}</p>
+                                    <p><strong className="text-zinc-100">Khách hàng:</strong> {selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</p>
+                                    <p><strong className="text-zinc-100">Nguồn:</strong> <span className="uppercase">{selectedBooking.source}</span></p>
                                 </div>
-                                <div>
-                                    <label className="block text-xs text-zinc-500 uppercase mb-1">Trả phòng</label>
-                                    <input
-                                        type="datetime-local"
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white [color-scheme:dark]"
-                                        value={editBookingData.checkOut}
-                                        onChange={e => setEditBookingData({ ...editBookingData, checkOut: e.target.value })}
-                                    />
-                                </div>
-                            </div>
 
-                            <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label className="block text-xs text-zinc-500 uppercase mb-1">Nhận phòng</label>
+                                        <input
+                                            type="datetime-local"
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white [color-scheme:dark]"
+                                            value={editBookingData.checkIn}
+                                            onChange={e => setEditBookingData({ ...editBookingData, checkIn: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs text-zinc-500 uppercase mb-1">Trả phòng</label>
+                                        <input
+                                            type="datetime-local"
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white [color-scheme:dark]"
+                                            value={editBookingData.checkOut}
+                                            onChange={e => setEditBookingData({ ...editBookingData, checkOut: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label className="block text-xs text-zinc-500 uppercase mb-1">Trạng thái</label>
+                                        <select
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white"
+                                            value={editBookingData.status}
+                                            onChange={e => setEditBookingData({ ...editBookingData, status: e.target.value })}
+                                        >
+                                            <option value="NEW">Mới</option>
+                                            <option value="CONFIRMED">Xác nhận</option>
+                                            <option value="CHECKED_IN">Đang ở</option>
+                                            <option value="CHECKED_OUT">Đã rời đi</option>
+                                            <option value="CANCELLED">Hủy</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs text-zinc-500 uppercase mb-1">Thanh toán</label>
+                                        <select
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white"
+                                            value={editBookingData.paymentStatus}
+                                            onChange={e => setEditBookingData({ ...editBookingData, paymentStatus: e.target.value })}
+                                        >
+                                            <option value="PENDING">Chưa thanh toán</option>
+                                            <option value="PARTIAL">Một phần</option>
+                                            <option value="PAID">Đã thanh toán</option>
+                                            <option value="REFUNDED">Hoàn tiền</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <label className="block text-xs text-zinc-500 uppercase mb-1">Trạng thái</label>
+                                    <label className="block text-xs text-zinc-500 uppercase mb-1">Cơ cấu Doanh thu</label>
+                                    <div className="bg-zinc-900 border border-zinc-800 rounded p-3 text-sm flex flex-col gap-2">
+                                        <div className="flex justify-between items-center text-zinc-400">
+                                            <span>Tiền phòng:</span>
+                                            <span className="text-zinc-200">{(Number(editBookingData.totalAmount || 0) - bookingServices.reduce((a, b) => a + b.amount, 0)).toLocaleString('vi-VN')} VND</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-zinc-400">
+                                            <span>Tiền dịch vụ:</span>
+                                            <span className="text-zinc-200">{bookingServices.reduce((a, b) => a + b.amount, 0).toLocaleString('vi-VN')} VND</span>
+                                        </div>
+                                        <div className="flex justify-between items-center border-t border-zinc-800 pt-2 mt-1">
+                                            <span className="text-zinc-300 uppercase text-xs">Tổng thu khách (VND):</span>
+                                            <input
+                                                type="number"
+                                                className="w-32 bg-zinc-950 border border-zinc-700 focus:border-orange-500 rounded p-1 text-right text-white font-bold text-orange-400 outline-none"
+                                                value={editBookingData.totalAmount}
+                                                onChange={e => setEditBookingData({ ...editBookingData, totalAmount: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </TabsContent>
+
+                            <TabsContent value="services" className="space-y-4 mt-0 focus-visible:outline-none">
+                                <div className="flex gap-2 flex-wrap mb-2">
                                     <select
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white"
-                                        value={editBookingData.status}
-                                        onChange={e => setEditBookingData({ ...editBookingData, status: e.target.value })}
+                                        className="flex-1 bg-zinc-900 border border-zinc-800 rounded p-2 text-white text-sm min-w-40"
+                                        value={newService.serviceId}
+                                        onChange={e => {
+                                            const val = e.target.value;
+                                            if (val === 'NEW_SERVICE') {
+                                                setNewService(prev => ({ ...prev, serviceId: val, unitPrice: 0, customName: '' }));
+                                            } else {
+                                                const srv = availableServices.find((s: any) => s.id === val);
+                                                setNewService(prev => ({ ...prev, serviceId: val, unitPrice: srv ? srv.price : 0, customName: '' }));
+                                            }
+                                        }}
                                     >
-                                        <option value="NEW">Mới</option>
-                                        <option value="CONFIRMED">Xác nhận</option>
-                                        <option value="CHECKED_IN">Đang ở</option>
-                                        <option value="CHECKED_OUT">Đã rời đi</option>
-                                        <option value="CANCELLED">Hủy</option>
+                                        <option value="">-- Chọn dịch vụ --</option>
+                                        {availableServices.map((s: any) => (
+                                            <option key={s.id} value={s.id}>{s.name} ({s.price.toLocaleString()} VND)</option>
+                                        ))}
+                                        <option value="NEW_SERVICE">+ Tạo dịch vụ tùy chỉnh</option>
                                     </select>
+
+                                    {newService.serviceId === 'NEW_SERVICE' && (
+                                        <input
+                                            type="text"
+                                            className="w-full sm:w-auto flex-1 bg-zinc-900 border border-zinc-800 rounded p-2 text-white text-sm"
+                                            value={newService.customName}
+                                            onChange={e => setNewService({ ...newService, customName: e.target.value })}
+                                            placeholder="Tên dịch vụ mới"
+                                        />
+                                    )}
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        className="w-28 bg-zinc-900 border border-zinc-800 rounded p-2 text-right text-white text-sm"
+                                        value={newService.unitPrice}
+                                        onChange={e => setNewService({ ...newService, unitPrice: Number(e.target.value) })}
+                                        placeholder="Đơn giá"
+                                    />
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        className="w-16 bg-zinc-900 border border-zinc-800 rounded p-2 text-center text-white text-sm"
+                                        value={newService.quantity}
+                                        onChange={e => setNewService({ ...newService, quantity: Number(e.target.value) })}
+                                        placeholder="SL"
+                                    />
+                                    <Button onClick={handleAddServiceUsage} className="bg-blue-600 hover:bg-blue-700 text-white px-3 flex-shrink-0"><Plus className="w-4 h-4" /></Button>
                                 </div>
-                                <div>
-                                    <label className="block text-xs text-zinc-500 uppercase mb-1">Thanh toán</label>
-                                    <select
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white"
-                                        value={editBookingData.paymentStatus}
-                                        onChange={e => setEditBookingData({ ...editBookingData, paymentStatus: e.target.value })}
-                                    >
-                                        <option value="PENDING">Chưa thanh toán</option>
-                                        <option value="PARTIAL">Một phần</option>
-                                        <option value="PAID">Đã thanh toán</option>
-                                        <option value="REFUNDED">Hoàn tiền</option>
-                                    </select>
+                                <div className="border border-zinc-800 rounded overflow-hidden">
+                                    <table className="w-full text-sm text-left text-zinc-300">
+                                        <thead className="bg-zinc-900 text-xs text-zinc-400">
+                                            <tr>
+                                                <th className="px-3 py-2 font-medium">Dịch vụ</th>
+                                                <th className="px-3 py-2 font-medium text-center">SL</th>
+                                                <th className="px-3 py-2 font-medium text-right">Tổng (VND)</th>
+                                                <th className="px-3 py-2"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {bookingServices.length > 0 ? bookingServices.map(usage => (
+                                                <tr key={usage.id} className="border-b border-zinc-800/50 bg-zinc-950/50 hover:bg-zinc-900/50">
+                                                    <td className="px-3 py-2 text-white">{usage.service?.name}
+                                                        {usage.unitPrice !== usage.service?.price && <span className="text-xs text-zinc-500 block">({usage.unitPrice.toLocaleString()} đ/sp)</span>}
+                                                    </td>
+                                                    <td className="px-3 py-2 text-center">
+                                                        <input
+                                                            type="number"
+                                                            min="1"
+                                                            className="w-16 bg-zinc-950 border border-zinc-800 rounded p-1 text-center text-white text-xs outline-none focus:border-zinc-500"
+                                                            value={usage.quantity}
+                                                            onChange={e => handleUpdateServiceQuantity(usage.id, Number(e.target.value), usage.unitPrice, usage.amount)}
+                                                        />
+                                                    </td>
+                                                    <td className="px-3 py-2 text-right">{usage.amount.toLocaleString()}</td>
+                                                    <td className="px-3 py-2 text-right">
+                                                        <button className="text-zinc-500 hover:text-red-400" onClick={() => setServiceToRemove({ id: usage.id, amount: usage.amount })}>&times;</button>
+                                                    </td>
+                                                </tr>
+                                            )) : (
+                                                <tr>
+                                                    <td colSpan={4} className="px-3 py-6 text-center text-zinc-500 text-xs">Chưa có dịch vụ nào</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-xs text-zinc-500 uppercase mb-1">Tổng tiền (VND)</label>
-                                <input
-                                    type="number"
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white font-bold text-orange-400"
-                                    value={editBookingData.totalAmount}
-                                    onChange={e => setEditBookingData({ ...editBookingData, totalAmount: e.target.value })}
-                                />
-                            </div>
+                                <div className="flex flex-col gap-1 text-right pt-3 border-t border-zinc-800">
+                                    <div className="text-xs text-zinc-400">Tiền phòng: <span className="text-zinc-200">{(Number(editBookingData.totalAmount || 0) - bookingServices.reduce((a, b) => a + b.amount, 0)).toLocaleString('vi-VN')}</span> VND</div>
+                                    <div className="text-xs text-zinc-400">Tiền dịch vụ: <span className="text-zinc-200">{bookingServices.reduce((a, b) => a + b.amount, 0).toLocaleString('vi-VN')}</span> VND</div>
+                                    <div className="text-sm pt-2 mt-1 border-t border-zinc-800/50">
+                                        <span className="text-zinc-400 uppercase mr-2 text-xs">Tổng thu khách:</span>
+                                        <span className="font-bold text-orange-400">{Number(editBookingData.totalAmount || 0).toLocaleString('vi-VN')} VND</span>
+                                    </div>
+                                </div>
+                            </TabsContent>
+                        </Tabs>
 
-                            <div className="flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-zinc-800 mt-2">
-                                <Button variant="outline" className="mr-auto border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setSelectedBooking(null)}>Đóng</Button>
+                        <div className="flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-zinc-800 mt-2">
+                            <Button variant="outline" className="mr-auto border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setSelectedBooking(null)}>Đóng</Button>
 
-                                {(editBookingData.status === 'CHECKED_IN') && (
-                                    <Button variant="outline" className="text-violet-400 border-violet-900/50 hover:bg-violet-900/20" onClick={() => handleRequestCleaning()}>
-                                        Yêu cầu Dọn phòng
-                                    </Button>
-                                )}
+                            {(editBookingData.status === 'CHECKED_IN') && (
+                                <Button variant="outline" className="text-violet-400 border-violet-900/50 hover:bg-violet-900/20" onClick={() => handleRequestCleaning()}>
+                                    Yêu cầu Dọn phòng
+                                </Button>
+                            )}
 
-                                <Button variant="secondary" className="bg-zinc-800 text-white hover:bg-zinc-700" onClick={() => handleSaveBookingEdit()}>Lưu</Button>
+                            <Button variant="secondary" className="bg-zinc-800 text-white hover:bg-zinc-700" onClick={() => handleSaveBookingEdit()}>Lưu</Button>
 
-                                {(editBookingData.status === 'NEW' || editBookingData.status === 'CONFIRMED') && (
-                                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleSaveBookingEdit('CHECKED_IN')}>
-                                        Check-in
-                                    </Button>
-                                )}
+                            {(editBookingData.status === 'NEW' || editBookingData.status === 'CONFIRMED') && (
+                                <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleSaveBookingEdit('CHECKED_IN')}>
+                                    Check-in
+                                </Button>
+                            )}
 
-                                {editBookingData.status === 'CHECKED_IN' && (
-                                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleSaveBookingEdit('CHECKED_OUT', 'PAID')}>
-                                        Thu tiền nốt & Check-out
-                                    </Button>
-                                )}
-                            </div>
+                            {editBookingData.status === 'CHECKED_IN' && (
+                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleSaveBookingEdit('CHECKED_OUT', 'PAID')}>
+                                    Thu tiền nốt & Check-out
+                                </Button>
+                            )}
                         </div>
                     </Card>
                 </div>
             )}
+
+            {/* Service Removal Alert Dialog */}
+            <AlertDialog open={!!serviceToRemove} onOpenChange={(open) => !open && setServiceToRemove(null)}>
+                <AlertDialogContent className="bg-zinc-950 border-zinc-800 text-white">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Xóa dịch vụ</AlertDialogTitle>
+                        <AlertDialogDescription className="text-zinc-400">
+                            Bạn có chắc chắn muốn xóa dịch vụ này khỏi Đặt phòng? Việc này không thể hoàn tác và doanh thu sẽ tự động được cập nhật.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel className="border-zinc-800 bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white">Thoát</AlertDialogCancel>
+                        <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white" onClick={() => {
+                            if (serviceToRemove) {
+                                handleRemoveServiceUsage(serviceToRemove.id, serviceToRemove.amount);
+                                setServiceToRemove(null);
+                            }
+                        }}>
+                            Xác nhận xóa
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

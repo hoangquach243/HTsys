@@ -70,4 +70,11 @@ export class ServicesService {
             orderBy: { date: 'desc' }
         });
     }
+
+    async updateServiceUsage(usageId: string, quantity: number, amount: number) {
+        return this.prisma.serviceUsage.update({
+            where: { id: usageId },
+            data: { quantity, amount }
+        });
+    }
 }
