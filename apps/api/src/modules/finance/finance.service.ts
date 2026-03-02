@@ -24,7 +24,15 @@ export class FinanceService {
             where,
             include: {
                 booking: {
-                    select: { code: true, guest: { select: { name: true } } }
+                    select: {
+                        code: true,
+                        guest: { select: { name: true } },
+                        bookingRooms: {
+                            select: {
+                                room: { select: { roomNumber: true } }
+                            }
+                        }
+                    }
                 },
                 staff: { select: { name: true } }
             },
@@ -69,6 +77,37 @@ export class FinanceService {
         });
     }
 
+    // ===== RECEIVABLES (Công nợ) =====
+
+    getReceivables(propertyId: string, startDate?: string, endDate?: string) {
+        const where: any = {
+            propertyId,
+            paymentStatus: { in: ['UNPAID', 'PARTIAL'] },
+            status: { notIn: ['CANCELLED', 'NO_SHOW'] }
+        };
+
+        if (startDate && endDate) {
+            where.createdAt = {
+                gte: new Date(startDate),
+                lte: new Date(endDate)
+            };
+        }
+
+        return this.prisma.booking.findMany({
+            where,
+            include: {
+                guest: { select: { name: true } },
+                createdBy: { select: { name: true } },
+                bookingRooms: {
+                    select: {
+                        room: { select: { roomNumber: true } }
+                    }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+    }
+
     // ===== EXPENSES (Outgoing) =====
 
     findAllExpenses(propertyId: string, startDate?: string, endDate?: string) {
@@ -83,6 +122,9 @@ export class FinanceService {
 
         return this.prisma.expense.findMany({
             where,
+            include: {
+                createdBy: { select: { name: true } }
+            },
             orderBy: { date: 'desc' }
         });
     }
@@ -90,6 +132,8 @@ export class FinanceService {
     createExpense(dto: CreateExpenseDto) {
         return this.prisma.expense.create({
             data: {
+                code: dto.code || `PC-${Date.now().toString().slice(-6)}`,
+                title: dto.title,
                 category: dto.category,
                 description: dto.description,
                 amount: dto.amount,

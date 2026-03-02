@@ -1,3 +1,5 @@
+import { IsString, IsOptional } from 'class-validator';
+
 export class UpdatePropertyDto {
     name?: string;
     phone?: string;
@@ -62,4 +64,26 @@ export class CreateLabelDto {
 export class UpdateLabelDto {
     name?: string;
     color?: string;
+}
+
+export class CreateCategoryDto {
+    @IsString()
+    name: string;
+
+    @IsOptional()
+    @IsString()
+    type?: string;
+
+    @IsString()
+    propertyId: string;
+}
+
+export class UpdateCategoryDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
+
+    @IsOptional()
+    @IsString()
+    type?: string;
 }

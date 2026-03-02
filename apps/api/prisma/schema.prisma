@@ -80,6 +80,7 @@ model User {
   payments        Payment[] @relation("PaymentStaff")
   assignedTasks   Task[]    @relation("TaskAssignee")
   createdBookings Booking[] @relation("BookingCreator")
+  createdExpenses Expense[] @relation("ExpenseCreator")
 
   @@map("users")
 }
@@ -297,6 +298,8 @@ model Payment {
 
 model Expense {
   id                String    @id @default(cuid())
+  code              String?   @unique
+  title             String?
   category          String
   description       String?
   amount            Float
@@ -311,7 +314,8 @@ model Expense {
   updatedAt         DateTime  @updatedAt
 
   // Relations
-  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property  Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation("ExpenseCreator", fields: [createdById], references: [id])
 
   @@map("expenses")
 }

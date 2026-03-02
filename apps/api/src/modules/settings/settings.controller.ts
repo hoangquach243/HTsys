@@ -10,7 +10,7 @@ import {
 } from './dto/settings.dto';
 
 @Controller('settings')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class SettingsController {
     constructor(private readonly settingsService: SettingsService) { }
 
@@ -107,5 +107,26 @@ export class SettingsController {
     @Delete('labels/:id')
     deleteLabel(@Param('id') id: string) {
         return this.settingsService.deleteLabel(id);
+    }
+
+    // ===== CATEGORIES =====
+    @Get('categories')
+    getCategories(@Query('propertyId') propertyId: string) {
+        return this.settingsService.getCategories(propertyId);
+    }
+
+    @Post('categories')
+    createCategory(@Body() dto: any) {
+        return this.settingsService.createCategory(dto);
+    }
+
+    @Patch('categories/:id')
+    updateCategory(@Param('id') id: string, @Body() dto: any) {
+        return this.settingsService.updateCategory(id, dto);
+    }
+
+    @Delete('categories/:id')
+    deleteCategory(@Param('id') id: string) {
+        return this.settingsService.deleteCategory(id);
     }
 }

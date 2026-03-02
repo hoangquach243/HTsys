@@ -106,4 +106,21 @@ export class SettingsService {
     deleteLabel(id: string) {
         return this.prisma.label.delete({ where: { id } });
     }
+
+    // ===== CATEGORIES =====
+    getCategories(propertyId: string) {
+        return this.prisma.category.findMany({ where: { propertyId }, orderBy: { name: 'asc' } });
+    }
+
+    createCategory(dto: any) {
+        return this.prisma.category.create({ data: dto });
+    }
+
+    updateCategory(id: string, dto: any) {
+        return this.prisma.category.update({ where: { id }, data: dto });
+    }
+
+    deleteCategory(id: string) {
+        return this.prisma.category.delete({ where: { id } });
+    }
 }
