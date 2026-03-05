@@ -65,16 +65,43 @@ export default function CalendarPage() {
                 const bookingsRes = await fetch(`http://localhost:3001/api/bookings?limit=100&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
                 const bookingsData = await bookingsRes.json();
 
+                let arrBookings = bookingsData.data || [];
+                const virtualRooms: any[] = [];
+
+                arrBookings = arrBookings.map((b: any) => {
+                    const isUnconfirmedExternal = b.status === 'NEW' && b.source && b.source.toLowerCase() !== 'walk-in';
+
+                    const newBookingRooms = b.bookingRooms?.map((br: any) => {
+                        if (isUnconfirmedExternal || !br.roomId) {
+                            const vRoomId = `unassigned_${br.id || Math.random()}`;
+                            virtualRooms.push({
+                                id: vRoomId,
+                                roomNumber: `Đơn ${b.code}`,
+                                floor: '-',
+                                isVirtual: true
+                            });
+                            return { ...br, originalRoomId: br.roomId, roomId: vRoomId };
+                        }
+                        return br;
+                    });
+
+                    return { ...b, bookingRooms: newBookingRooms };
+                });
+
+                if (virtualRooms.length === 0) {
+                    virtualRooms.push({ id: null, roomNumber: 'Trống', floor: '-' });
+                }
+
                 let arrTypes = Array.isArray(typesData) ? typesData : typesData.data || [];
-                // Virtual row for unassigned bookings (roomId is null)
+                // Virtual row group for unassigned/unconfirmed bookings
                 arrTypes = [{
                     id: 'unassigned',
                     name: 'Đơn chờ xếp phòng',
-                    rooms: [{ id: null, roomNumber: 'Chưa có', floor: '-' }]
+                    rooms: virtualRooms
                 }, ...arrTypes];
 
                 setRoomTypes(arrTypes);
-                setBookings(bookingsData.data || []);
+                setBookings(arrBookings);
 
                 // Fetch available services
                 const servicesRes = await fetch(`http://localhost:3001/api/services?propertyId=clouq2m1q00003b6w5z8s6xy9`);
