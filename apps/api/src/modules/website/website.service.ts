@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -62,15 +62,17 @@ export class WebsiteService {
             where: {
                 booking: {
                     propertyId: config.propertyId,
-                    status: { in: ['NEW', 'CONFIRMED', 'CHECKED_IN'] },
-                    checkIn: { lt: checkOutDate },
-                    checkOut: { gt: checkInDate },
+                    status: { notIn: ['CANCELLED', 'NO_SHOW'] },
                 },
+                AND: [
+                    { checkIn: { lt: checkOutDate } },
+                    { checkOut: { gt: checkInDate } }
+                ]
             },
             select: { roomId: true },
         });
 
-        const bookedSet = new Set(bookedRoomIds.filter(b => b.roomId).map((b: any) => b.roomId));
+        const bookedSet = new Set(bookedRoomIds.filter((b: any) => b.roomId).map((b: any) => b.roomId));
 
         const roomTypes = await this.prisma.roomType.findMany({
             where: { propertyId: config.propertyId },
@@ -92,11 +94,47 @@ export class WebsiteService {
 
     async createPublicBooking(slug: string, dto: any) {
         const config = await (this.prisma as any).websiteConfig.findUnique({ where: { slug } });
-        if (!config || !config.isPublished) throw new NotFoundException('Website not found');
+        if (!config || !config.isPublished) throw new BadRequestException('Website not found');
 
         const { guestName, guestPhone, guestEmail, roomTypeId, checkIn, checkOut, notes } = dto;
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
 
-        // Upsert guest
+        // Calculate nights and price
+        const nights = Math.max(1, Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 3600 * 24)));
+        const roomType = await this.prisma.roomType.findUnique({
+            where: { id: roomTypeId },
+            include: { ratePlans: { where: { isDefault: true } }, rooms: true },
+        });
+
+        if (!roomType) throw new BadRequestException('Loại phòng không tồn tại');
+
+        const basePrice = roomType.ratePlans?.[0]?.basePrice ?? roomType.basePrice ?? 0;
+        const totalAmount = Number(basePrice) * nights;
+
+        // RACE CONDITION CHECK & ROOM ALLOCATION
+        // 1. Find all rooms that are currently booked in this timeframe
+        const overlappingBookings = await this.prisma.bookingRoom.findMany({
+            where: {
+                roomTypeId: roomTypeId,
+                booking: { status: { notIn: ['CANCELLED', 'NO_SHOW'] } },
+                AND: [
+                    { checkIn: { lt: checkOutDate } },
+                    { checkOut: { gt: checkInDate } }
+                ]
+            },
+            select: { roomId: true }
+        });
+        const bookedRoomIds = new Set(overlappingBookings.filter(b => b.roomId).map(b => b.roomId));
+
+        // 2. Find a room of this type that is NOT in the bookedRoomIds set and is AVAILABLE
+        const availableRoom = roomType.rooms.find(r => !bookedRoomIds.has(r.id) && r.status === 'AVAILABLE');
+
+        if (!availableRoom) {
+            throw new BadRequestException('Rất tiếc, loại phòng này vừa hết chỗ trong khoảng thời gian bạn chọn. Vui lòng chọn loại phòng khác.');
+        }
+
+        // 3. Upsert guest
         let guest = await this.prisma.guest.findFirst({
             where: { phone: guestPhone, propertyId: config.propertyId },
         });
@@ -112,17 +150,7 @@ export class WebsiteService {
             });
         }
 
-        const checkInDate = new Date(checkIn);
-        const checkOutDate = new Date(checkOut);
-        const nights = Math.max(1, Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 3600 * 24)));
-
-        const roomType = await this.prisma.roomType.findFirst({
-            where: { id: roomTypeId },
-            include: { ratePlans: { where: { isDefault: true } } },
-        });
-        const basePrice = roomType?.ratePlans?.[0]?.basePrice ?? roomType?.basePrice ?? 0;
-        const totalAmount = Number(basePrice) * nights;
-
+        // 4. Create booking with the specific allocated room
         const code = 'WEB-' + Date.now().toString(36).toUpperCase();
 
         const booking = await this.prisma.booking.create({
@@ -137,6 +165,7 @@ export class WebsiteService {
                 notes: notes || null,
                 bookingRooms: {
                     create: [{
+                        roomId: availableRoom.id,
                         roomTypeId,
                         price: basePrice,
                         checkIn: checkInDate,
@@ -148,4 +177,5 @@ export class WebsiteService {
 
         return { success: true, bookingCode: booking.code, totalAmount };
     }
+
 }
