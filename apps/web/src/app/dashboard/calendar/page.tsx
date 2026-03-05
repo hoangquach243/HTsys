@@ -65,7 +65,15 @@ export default function CalendarPage() {
                 const bookingsRes = await fetch(`http://localhost:3001/api/bookings?limit=100&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
                 const bookingsData = await bookingsRes.json();
 
-                setRoomTypes(Array.isArray(typesData) ? typesData : typesData.data || []);
+                let arrTypes = Array.isArray(typesData) ? typesData : typesData.data || [];
+                // Virtual row for unassigned bookings (roomId is null)
+                arrTypes = [{
+                    id: 'unassigned',
+                    name: 'Đơn chờ xếp phòng',
+                    rooms: [{ id: null, roomNumber: 'Chưa có', floor: '-' }]
+                }, ...arrTypes];
+
+                setRoomTypes(arrTypes);
                 setBookings(bookingsData.data || []);
 
                 // Fetch available services
@@ -98,6 +106,7 @@ export default function CalendarPage() {
 
     // Drag Handlers
     const handleCellMouseDown = (room: any, type: any, date: Date, e: React.MouseEvent) => {
+        if (room.id === null) return;
         e.preventDefault(); // prevent text selection
         setIsDragging(true);
         setDragStart({ roomId: room.id, roomTypeId: type.id, roomName: `${type.name} - ${room.roomNumber}`, date });
@@ -105,12 +114,19 @@ export default function CalendarPage() {
     };
 
     const handleCellMouseEnter = (room: any, date: Date) => {
+        if (room.id === null) return;
         if (isDragging && dragStart?.roomId === room.id) {
             setDragCurrent(date);
         }
     };
 
     const handleCellMouseUp = (room: any, type: any, date: Date) => {
+        if (room.id === null) {
+            setIsDragging(false);
+            setDragStart(null);
+            setDragCurrent(null);
+            return;
+        }
         if (isDragging && dragStart) {
             if (dragStart.roomId === room.id) {
                 const sDate = dragStart.date <= date ? dragStart.date : date;
@@ -162,7 +178,8 @@ export default function CalendarPage() {
             checkOut: format(new Date(booking.checkOut), "yyyy-MM-dd'T'HH:mm"),
             status: booking.status,
             paymentStatus: booking.paymentStatus,
-            totalAmount: booking.totalAmount
+            totalAmount: booking.totalAmount,
+            roomId: booking.bookingRooms?.[0]?.roomId || ''
         });
 
         // Load services for this booking
@@ -177,13 +194,18 @@ export default function CalendarPage() {
 
     const handleSaveBookingEdit = async (actionStatus?: string, actionPayment?: string) => {
         try {
-            const payload = {
+            const payload: any = {
                 status: actionStatus || editBookingData.status,
                 paymentStatus: actionPayment || editBookingData.paymentStatus,
                 checkIn: new Date(editBookingData.checkIn).toISOString(),
                 checkOut: new Date(editBookingData.checkOut).toISOString(),
                 totalAmount: Number(editBookingData.totalAmount)
             };
+
+            if (editBookingData.roomId) {
+                payload.roomId = editBookingData.roomId;
+            }
+
             const res = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -879,6 +901,23 @@ export default function CalendarPage() {
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label className="block text-xs text-zinc-500 uppercase mb-1">Phòng xếp (Gán phòng)</label>
+                                                <select
+                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-white"
+                                                    value={editBookingData.roomId || ''}
+                                                    onChange={e => setEditBookingData({ ...editBookingData, roomId: e.target.value })}
+                                                >
+                                                    <option value="">-- Chưa xếp phòng --</option>
+                                                    {roomTypes.filter((t: any) => t.id !== 'unassigned').map((type: any) => (
+                                                        <optgroup key={type.id} label={type.name}>
+                                                            {type.rooms?.map((room: any) => (
+                                                                <option key={room.id} value={room.id}>{room.roomNumber}</option>
+                                                            ))}
+                                                        </optgroup>
+                                                    ))}
+                                                </select>
+                                            </div>
                                             <div>
                                                 <label className="block text-xs text-zinc-500 uppercase mb-1">Trạng thái</label>
                                                 <select

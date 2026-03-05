@@ -189,13 +189,16 @@ export class BookingsService {
         if (dto.checkIn) data.checkIn = new Date(dto.checkIn);
         if (dto.checkOut) data.checkOut = new Date(dto.checkOut);
 
-        // Validation check for overlapping if dates change
-        if (data.checkIn || data.checkOut) {
+        const targetRoomId = data.roomId;
+        delete data.roomId;
+
+        // Validation check for overlapping if dates change or room assigned
+        if (data.checkIn || data.checkOut || targetRoomId !== undefined) {
             const checkIn = data.checkIn || existing.checkIn;
             const checkOut = data.checkOut || existing.checkOut;
 
             const roomsToValidate = existing.bookingRooms.map(br => ({
-                roomId: br.roomId || undefined,
+                roomId: targetRoomId !== undefined ? (targetRoomId || undefined) : (br.roomId || undefined),
                 checkIn: checkIn,
                 checkOut: checkOut
             }));
@@ -210,15 +213,23 @@ export class BookingsService {
                 include: { guest: true, bookingRooms: true }
             });
 
-            // Sync dates to BookingRooms if the overall booking dates changed
-            if (data.checkIn || data.checkOut) {
-                await tx.bookingRoom.updateMany({
-                    where: { bookingId: id },
-                    data: {
-                        checkIn: data.checkIn || undefined,
-                        checkOut: data.checkOut || undefined
+            // Sync dates or roomId to BookingRooms
+            if (data.checkIn || data.checkOut || targetRoomId !== undefined) {
+                const updatePayload: any = {};
+                if (data.checkIn) updatePayload.checkIn = data.checkIn;
+                if (data.checkOut) updatePayload.checkOut = data.checkOut;
+                if (targetRoomId !== undefined) updatePayload.roomId = targetRoomId || null;
+
+                if (Object.keys(updatePayload).length > 0) {
+                    // Update only front room for simple apps
+                    const firstBr = existing.bookingRooms[0];
+                    if (firstBr) {
+                        await tx.bookingRoom.update({
+                            where: { id: firstBr.id },
+                            data: updatePayload
+                        });
                     }
-                });
+                }
             }
 
             // Auto-create Housekeeping Task when checked-out

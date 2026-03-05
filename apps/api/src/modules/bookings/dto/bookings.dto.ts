@@ -96,4 +96,8 @@ export class UpdateBookingDto {
     @IsOptional()
     @IsString()
     notes?: string;
+
+    @IsOptional()
+    @IsString()
+    roomId?: string;
 }
