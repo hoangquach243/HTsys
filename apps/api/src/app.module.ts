@@ -14,6 +14,7 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { AutomationModule } from './modules/automation/automation.module';
 import { OtaModule } from './modules/ota/ota.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SettingsModule } from './modules/settings/settings.module';
     AutomationModule,
     OtaModule,
     SettingsModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
