@@ -3,46 +3,56 @@ import { ReportsService } from './reports.service';
 
 @Controller('reports')
 export class ReportsController {
-    constructor(private readonly reportsService: ReportsService) {}
+    constructor(private readonly reportsService: ReportsService) { }
 
     @Get('revenue')
     getRevenueReport(
         @Query('propertyId') propertyId: string,
-        @Query('period') period?: string
+        @Query('period') period?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
     ) {
-        return this.reportsService.getRevenueReport(propertyId, period);
+        return this.reportsService.getRevenueReport(propertyId, period, startDate, endDate);
     }
 
     @Get('operations')
     getOperationsReport(
         @Query('propertyId') propertyId: string,
-        @Query('period') period?: string
+        @Query('period') period?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
     ) {
-        return this.reportsService.getOperationsReport(propertyId, period);
+        return this.reportsService.getOperationsReport(propertyId, period, startDate, endDate);
     }
 
     @Get('payments')
     getPaymentsReport(
         @Query('propertyId') propertyId: string,
-        @Query('period') period?: string
+        @Query('period') period?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
     ) {
-        return this.reportsService.getPaymentsReport(propertyId, period);
+        return this.reportsService.getPaymentsReport(propertyId, period, startDate, endDate);
     }
 
     @Get('services')
     getServicesReport(
         @Query('propertyId') propertyId: string,
-        @Query('period') period?: string
+        @Query('period') period?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
     ) {
-        return this.reportsService.getServicesReport(propertyId, period);
+        return this.reportsService.getServicesReport(propertyId, period, startDate, endDate);
     }
 
     @Get('performance')
     getPerformanceReport(
         @Query('propertyId') propertyId: string,
-        @Query('period') period?: string
+        @Query('period') period?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
     ) {
-        return this.reportsService.getPerformanceReport(propertyId, period);
+        return this.reportsService.getPerformanceReport(propertyId, period, startDate, endDate);
     }
 
     @Get('monthly')

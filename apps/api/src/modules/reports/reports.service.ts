@@ -5,7 +5,15 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class ReportsService {
     constructor(private prisma: PrismaService) { }
 
-    private getDateRange(period?: string) {
+    private getDateRange(period?: string, customStart?: string, customEnd?: string) {
+        if (period === 'custom' && customStart && customEnd) {
+            const startDate = new Date(customStart);
+            const endDate = new Date(customEnd);
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+            return { startDate, endDate };
+        }
+
         const endDate = new Date();
         const startDate = new Date();
 
@@ -29,8 +37,8 @@ export class ReportsService {
         return { startDate, endDate };
     }
 
-    async getRevenueReport(propertyId: string, period?: string) {
-        const { startDate, endDate } = this.getDateRange(period);
+    async getRevenueReport(propertyId: string, period?: string, customStart?: string, customEnd?: string) {
+        const { startDate, endDate } = this.getDateRange(period, customStart, customEnd);
 
         const bookings = await this.prisma.booking.findMany({
             where: {
@@ -110,8 +118,8 @@ export class ReportsService {
         };
     }
 
-    async getOperationsReport(propertyId: string, period?: string) {
-        let { startDate, endDate } = this.getDateRange(period);
+    async getOperationsReport(propertyId: string, period?: string, customStart?: string, customEnd?: string) {
+        let { startDate, endDate } = this.getDateRange(period, customStart, customEnd);
         if (period === 'next7days') {
             startDate = new Date();
             startDate.setHours(0, 0, 0, 0);
@@ -171,8 +179,8 @@ export class ReportsService {
         };
     }
 
-    async getPaymentsReport(propertyId: string, period?: string) {
-        const { startDate, endDate } = this.getDateRange(period);
+    async getPaymentsReport(propertyId: string, period?: string, customStart?: string, customEnd?: string) {
+        const { startDate, endDate } = this.getDateRange(period, customStart, customEnd);
 
         const payments = await this.prisma.payment.findMany({
             where: {
@@ -222,8 +230,8 @@ export class ReportsService {
         };
     }
 
-    async getServicesReport(propertyId: string, period?: string) {
-        const { startDate, endDate } = this.getDateRange(period);
+    async getServicesReport(propertyId: string, period?: string, customStart?: string, customEnd?: string) {
+        const { startDate, endDate } = this.getDateRange(period, customStart, customEnd);
 
         const services = await this.prisma.serviceUsage.findMany({
             where: { booking: { propertyId }, createdAt: { gte: startDate, lte: endDate } },
@@ -275,8 +283,8 @@ export class ReportsService {
         };
     }
 
-    async getPerformanceReport(propertyId: string, period?: string) {
-        const { startDate, endDate } = this.getDateRange(period);
+    async getPerformanceReport(propertyId: string, period?: string, customStart?: string, customEnd?: string) {
+        const { startDate, endDate } = this.getDateRange(period, customStart, customEnd);
 
         const bookings = await this.prisma.booking.findMany({
             where: { propertyId, checkIn: { gte: startDate, lte: endDate }, status: { not: 'CANCELLED' } }

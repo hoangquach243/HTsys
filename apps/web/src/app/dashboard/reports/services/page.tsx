@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Download, Calendar as CalendarIcon, ConciergeBell, Coffee, Wine, Bath, Utensils } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
@@ -15,6 +16,8 @@ const formatVND = (value: number) => {
 
 export default function ServicesReportPage() {
     const [period, setPeriod] = useState('7days');
+    const [customStart, setCustomStart] = useState('');
+    const [customEnd, setCustomEnd] = useState('');
     const [data, setData] = useState<any[]>([]);
     const [trendData, setTrendData] = useState<any[]>([]);
     const [kpi, setKpi] = useState({ totalRev: 0, totalQty: 0, topRev: { name: 'N/A', revenue: 0 }, topCnt: { name: 'N/A', count: 0 } });
@@ -22,7 +25,13 @@ export default function ServicesReportPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:3001/api/reports/services?propertyId=clouq2m1q00003b6w5z8s6xy9&period=${period}`);
+                let url = `http://localhost:3001/api/reports/services?propertyId=clouq2m1q00003b6w5z8s6xy9&period=${period}`;
+                if (period === 'custom' && customStart && customEnd) {
+                    url += `&startDate=${customStart}&endDate=${customEnd}`;
+                } else if (period === 'custom') {
+                    return;
+                }
+                const res = await fetch(url);
                 const json = await res.json();
                 if (json.data) setData(json.data);
                 if (json.trendData) setTrendData(json.trendData);
@@ -32,7 +41,7 @@ export default function ServicesReportPage() {
             }
         };
         fetchData();
-    }, [period]);
+    }, [period, customStart, customEnd]);
 
     return (
         <div className="space-y-6">
@@ -45,7 +54,14 @@ export default function ServicesReportPage() {
                     <p className="text-zinc-400 mt-1">Sản phẩm bán chạy và xu hướng sử dụng Minibar, F&B.</p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap justify-end">
+                    {period === 'custom' && (
+                        <div className="flex items-center gap-2">
+                            <Input type="date" className="w-[140px] bg-zinc-900 border-zinc-800 text-white" value={customStart} onChange={(e) => setCustomStart(e.target.value)} />
+                            <span className="text-zinc-500">-</span>
+                            <Input type="date" className="w-[140px] bg-zinc-900 border-zinc-800 text-white" value={customEnd} onChange={(e) => setCustomEnd(e.target.value)} />
+                        </div>
+                    )}
                     <Select value={period} onValueChange={setPeriod}>
                         <SelectTrigger className="w-[160px] bg-zinc-900 border-zinc-800 text-white">
                             <CalendarIcon className="w-4 h-4 mr-2 text-zinc-400" />
@@ -55,6 +71,7 @@ export default function ServicesReportPage() {
                             <SelectItem value="7days">7 ngày qua</SelectItem>
                             <SelectItem value="30days">30 ngày qua</SelectItem>
                             <SelectItem value="thisMonth">Tháng này</SelectItem>
+                            <SelectItem value="custom">Tùy chỉnh...</SelectItem>
                         </SelectContent>
                     </Select>
                     <Button variant="outline" className="border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300">
