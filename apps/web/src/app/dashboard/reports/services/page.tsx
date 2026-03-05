@@ -3,7 +3,9 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Download, Calendar as CalendarIcon, ConciergeBell, Coffee, Wine, Bath, Utensils } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
@@ -16,8 +18,7 @@ const formatVND = (value: number) => {
 
 export default function ServicesReportPage() {
     const [period, setPeriod] = useState('7days');
-    const [customStart, setCustomStart] = useState('');
-    const [customEnd, setCustomEnd] = useState('');
+    const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
     const [data, setData] = useState<any[]>([]);
     const [trendData, setTrendData] = useState<any[]>([]);
     const [kpi, setKpi] = useState({ totalRev: 0, totalQty: 0, topRev: { name: 'N/A', revenue: 0 }, topCnt: { name: 'N/A', count: 0 } });
@@ -26,8 +27,8 @@ export default function ServicesReportPage() {
         const fetchData = async () => {
             try {
                 let url = `http://localhost:3001/api/reports/services?propertyId=clouq2m1q00003b6w5z8s6xy9&period=${period}`;
-                if (period === 'custom' && customStart && customEnd) {
-                    url += `&startDate=${customStart}&endDate=${customEnd}`;
+                if (period === 'custom' && customDateRange?.from && customDateRange?.to) {
+                    url += `&startDate=${format(customDateRange.from, 'yyyy-MM-dd')}&endDate=${format(customDateRange.to, 'yyyy-MM-dd')}`;
                 } else if (period === 'custom') {
                     return;
                 }
@@ -41,7 +42,7 @@ export default function ServicesReportPage() {
             }
         };
         fetchData();
-    }, [period, customStart, customEnd]);
+    }, [period, customDateRange]);
 
     return (
         <div className="space-y-6">
@@ -57,9 +58,7 @@ export default function ServicesReportPage() {
                 <div className="flex items-center gap-3 flex-wrap justify-end">
                     {period === 'custom' && (
                         <div className="flex items-center gap-2">
-                            <Input type="date" className="w-[140px] bg-zinc-900 border-zinc-800 text-white" value={customStart} onChange={(e) => setCustomStart(e.target.value)} />
-                            <span className="text-zinc-500">-</span>
-                            <Input type="date" className="w-[140px] bg-zinc-900 border-zinc-800 text-white" value={customEnd} onChange={(e) => setCustomEnd(e.target.value)} />
+                            <DateRangePicker date={customDateRange} setDate={setCustomDateRange} />
                         </div>
                     )}
                     <Select value={period} onValueChange={setPeriod}>
