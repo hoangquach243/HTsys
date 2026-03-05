@@ -224,20 +224,26 @@ export default function HomePage() {
             {(searched ? availability : roomTypes).map((rt: any) => {
               const price = rt.ratePlans?.[0]?.basePrice ?? rt.basePrice ?? 0;
               const isAvail = !searched || (rt.availableCount ?? 1) > 0;
+              const photos = Array.isArray(rt.photos) ? rt.photos : (typeof rt.photos === 'string' ? JSON.parse(rt.photos || '[]') : []);
+              
               return (
-                <div key={rt.id} className={`rounded-2xl border overflow-hidden shadow-md hover:shadow-xl transition-all group ${!isAvail ? 'opacity-60' : ''}`}>
-                  {/* Room image placeholder */}
-                  <div className="h-52 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}22, ${accentColor}33)` }}>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-6xl">🛏️</span>
-                    </div>
+                <div key={rt.id} className={`rounded-2xl border overflow-hidden shadow-md hover:shadow-xl transition-all bg-white group ${!isAvail ? 'opacity-60 grayscale-[30%]' : ''}`}>
+                  <div className="h-56 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}22, ${accentColor}33)` }}>
+                    {photos.length > 0 ? (
+                        <img src={photos[0]} alt={rt.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                          <span className="text-6xl drop-shadow-md">🛏️</span>
+                        </div>
+                    )}
+                    
                     {searched && (
-                      <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold text-white ${isAvail ? 'bg-green-500' : 'bg-red-500'}`}>
+                      <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-sm ${isAvail ? 'bg-green-500/90' : 'bg-red-500/90'}`}>
                         {isAvail ? `Còn ${rt.availableCount} phòng` : 'Hết phòng'}
                       </div>
                     )}
                   </div>
-                  <div className="p-5">
+                  <div className="p-6">
                     <h3 className="text-lg font-bold text-gray-800 mb-1">{rt.name}</h3>
                     <p className="text-gray-500 text-sm mb-3 line-clamp-2">{rt.description || 'Phòng tiện nghi, thoải mái với đầy đủ tiện ích.'}</p>
                     <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
