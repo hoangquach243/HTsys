@@ -271,7 +271,16 @@ export default function CalendarPage() {
     const handlePrint = async (type: string) => {
         try {
             const res = await fetch(`http://localhost:3001/api/settings/print-templates/type/${type}?propertyId=clouq2m1q00003b6w5z8s6xy9`);
-            const templateData = await res.json();
+            if (!res.ok) {
+                alert("Lỗi máy chủ khi tải mẫu in");
+                return;
+            }
+            const textResponse = await res.text();
+            if (!textResponse) {
+                alert("Mẫu in chưa được cấu hình. Vui lòng vào Cài đặt -> Mẫu in ấn.");
+                return;
+            }
+            const templateData = JSON.parse(textResponse);
 
             if (!templateData || !templateData.content) {
                 alert("Mẫu in chưa được cấu hình. Vui lòng vào Cài đặt -> Mẫu in ấn.");
