@@ -52,11 +52,6 @@ export class CreateRoomTypeDto {
     @IsOptional()
     amenities?: string[];
 
-    @IsArray()
-    @IsString({ each: true })
-    @IsOptional()
-    photos?: string[];
-
     @IsString()
     propertyId: string;
 }
@@ -122,6 +117,11 @@ export class CreateRoomDto {
 
     @IsString()
     roomTypeId: string;
+
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    photos?: string[];
 }
 
 export class UpdateRoomDto {
@@ -144,6 +144,11 @@ export class UpdateRoomDto {
     @IsString()
     @IsOptional()
     notes?: string;
+
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    photos?: string[];
 }
 
 export class CreateRatePlanDto {

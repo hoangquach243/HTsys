@@ -12,7 +12,7 @@ export class RoomsService {
         return this.prisma.roomType.findMany({
             where: { propertyId },
             include: {
-                rooms: { select: { id: true, roomNumber: true, status: true, floor: true } },
+                rooms: { select: { id: true, roomNumber: true, status: true, floor: true, photos: true } },
                 _count: { select: { rooms: true } },
             },
             orderBy: { sortOrder: 'asc' },
@@ -52,7 +52,6 @@ export class RoomsService {
                 basePrice: dto.basePrice ?? 0,
                 weekendPrice: dto.weekendPrice,
                 amenities: dto.amenities ?? [],
-                photos: dto.photos ?? [],
                 propertyId: dto.propertyId,
             },
             include: { rooms: true },
@@ -82,6 +81,7 @@ export class RoomsService {
                 floor: dto.floor,
                 area: dto.area,
                 roomTypeId: dto.roomTypeId,
+                photos: dto.photos ?? [],
             },
         });
     }

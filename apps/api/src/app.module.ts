@@ -16,6 +16,7 @@ import { OtaModule } from './modules/ota/ota.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { WebsiteModule } from './modules/website/website.module';
+import { MediaModule } from './modules/media/media.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { WebsiteModule } from './modules/website/website.module';
     SettingsModule,
     DashboardModule,
     WebsiteModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

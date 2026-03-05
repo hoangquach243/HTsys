@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, X, Plus, Upload } from 'lucide-react';
 
 export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
     const [formData, setFormData] = useState({
@@ -13,8 +14,11 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
         status: 'AVAILABLE',
         notes: '',
         roomTypeId: '',
+        photos: [] as string[],
     });
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (room) {
@@ -25,6 +29,7 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
                 status: room.status || 'AVAILABLE',
                 notes: room.notes || '',
                 roomTypeId: room.roomTypeId || '',
+                photos: room.photos || [],
             });
         } else {
             setFormData({
@@ -34,9 +39,37 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
                 status: 'AVAILABLE',
                 notes: '',
                 roomTypeId: roomTypes[0]?.id || '',
+                photos: [],
             });
         }
     }, [room, isOpen, roomTypes]);
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files?.[0]) return;
+
+        setUploading(true);
+        try {
+            const file = e.target.files[0];
+            const formDataUpload = new FormData();
+            formDataUpload.append('file', file);
+
+            const res = await fetch('http://localhost:3001/api/media/upload', {
+                method: 'POST',
+                body: formDataUpload,
+            });
+
+            if (!res.ok) throw new Error('Upload failed');
+
+            const data = await res.json();
+            setFormData(prev => ({ ...prev, photos: [...prev.photos, data.url] }));
+        } catch (error) {
+            console.error(error);
+            alert('Lỗi khi tải ảnh lên');
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -48,13 +81,18 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
 
             const method = room ? 'PATCH' : 'POST';
 
-            const { roomTypeId, status, notes, ...updateData } = formData;
+            // Extract values
+            const { roomTypeId, status, notes, photos, ...updateData } = formData;
 
-            // For updates, we don't send roomTypeId.
-            // For creation, we don't send status and notes because they aren't in CreateRoomDto.
             const payload = room
-                ? { ...updateData, status, notes }
-                : { roomNumber: formData.roomNumber, floor: formData.floor, area: formData.area, roomTypeId: formData.roomTypeId };
+                ? { ...updateData, status, notes, photos }
+                : {
+                    roomNumber: formData.roomNumber,
+                    floor: formData.floor,
+                    area: formData.area,
+                    roomTypeId: formData.roomTypeId,
+                    photos
+                };
 
             const res = await fetch(url, {
                 method,
@@ -142,6 +180,39 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
                             </Select>
                         </div>
                     )}
+                    <div className="grid gap-2">
+                        <Label className="text-zinc-200">Hình ảnh phòng</Label>
+                        <div className="grid grid-cols-4 gap-2 mb-2">
+                            {formData.photos.map((url, idx) => (
+                                <div key={idx} className="relative group aspect-square rounded-md overflow-hidden border border-zinc-800">
+                                    <img src={url} alt="" className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== idx) }))}
+                                        className="absolute top-1 right-1 bg-red-600 text-white p-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={uploading}
+                                className="aspect-square rounded-md border-2 border-dashed border-zinc-800 flex flex-col items-center justify-center hover:border-blue-500/50 hover:bg-blue-500/5 transition-colors disabled:opacity-50"
+                            >
+                                {uploading ? <Loader2 className="w-5 h-5 animate-spin text-zinc-500" /> : <Plus className="w-5 h-5 text-zinc-500" />}
+                                <span className="text-[10px] text-zinc-500 mt-1">{uploading ? 'Đang tải' : 'Thêm ảnh'}</span>
+                            </button>
+                        </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileUpload}
+                            className="hidden"
+                            accept="image/*"
+                        />
+                    </div>
                     <div className="grid gap-2">
                         <Label className="text-zinc-200">Ghi chú</Label>
                         <Input

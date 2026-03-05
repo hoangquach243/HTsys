@@ -29,10 +29,8 @@ export function RoomTypeModal({ isOpen, onClose, roomType, onSaved }: any) {
         maxInfants: 0,
         basePrice: 0,
         weekendPrice: 0,
-        photos: [] as string[],
     });
     const [loading, setLoading] = useState(false);
-    const [photoInput, setPhotoInput] = useState("");
 
     useEffect(() => {
         if (roomType) {
@@ -46,21 +44,9 @@ export function RoomTypeModal({ isOpen, onClose, roomType, onSaved }: any) {
                 maxInfants: roomType.maxInfants || 0,
                 basePrice: roomType.basePrice || 0,
                 weekendPrice: roomType.weekendPrice || 0,
-                photos: roomType.photos || [],
             });
         } else {
-            setFormData({
-                name: "",
-                code: "",
-                kind: "ROOM",
-                description: "",
-                maxAdults: 2,
-                maxChildren: 1,
-                maxInfants: 0,
-                basePrice: 0,
-                weekendPrice: 0,
-                photos: [],
-            });
+            setFormData({ name: '', code: '', kind: 'ROOM', description: '', maxAdults: 2, maxChildren: 1, maxInfants: 0, basePrice: 0, weekendPrice: 0 });
         }
     }, [roomType, isOpen]);
 
@@ -230,46 +216,7 @@ export function RoomTypeModal({ isOpen, onClose, roomType, onSaved }: any) {
                         </div>
                     </div>
 
-                    <div className="grid gap-2">
-                        <Label className="text-zinc-200">Hình ảnh loại phòng (URL)</Label>
-                        <div className="flex gap-2">
-                            <Input
-                                type="url"
-                                placeholder="https://example.com/image.jpg"
-                                value={photoInput}
-                                onChange={(e) => setPhotoInput(e.target.value)}
-                                className="bg-zinc-900 border-zinc-800 text-white flex-1"
-                            />
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() => {
-                                    if (photoInput && !formData.photos.includes(photoInput)) {
-                                        setFormData(prev => ({ ...prev, photos: [...prev.photos, photoInput] }));
-                                        setPhotoInput('');
-                                    }
-                                }}
-                            >
-                                Thêm
-                            </Button>
-                        </div>
-                        {formData.photos.length > 0 && (
-                            <div className="mt-2 grid grid-cols-3 gap-2">
-                                {formData.photos.map((url, idx) => (
-                                    <div key={idx} className="relative group border border-zinc-800 rounded-md overflow-hidden aspect-video">
-                                        <img src={url} alt={`Room ${idx}`} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
-                                        <button
-                                            type="button"
-                                            className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                            onClick={() => setFormData(prev => ({ ...prev, photos: prev.photos.filter(p => p !== url) }))}
-                                        >
-                                            &times;
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+
                     <DialogFooter>
                         <Button
                             type="button"
