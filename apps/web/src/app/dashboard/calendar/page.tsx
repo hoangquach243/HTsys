@@ -766,7 +766,7 @@ export default function CalendarPage() {
             {
                 selectedBooking && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setSelectedBooking(null)}>
-                        <Card className="w-full max-w-lg bg-zinc-950 border-zinc-800 p-6 flex flex-col gap-4 shadow-xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <Card className="w-full max-w-4xl bg-zinc-950 border-zinc-800 p-6 flex flex-col gap-4 shadow-xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
                             <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
                                 <h2 className="text-lg font-bold text-white">Quản lý Đặt phòng</h2>
                                 <button onClick={() => setSelectedBooking(null)} className="text-zinc-400 hover:text-white">&times;</button>
@@ -779,10 +779,10 @@ export default function CalendarPage() {
                                 </TabsList>
                                 <TabsContent value="info" className="mt-0 focus-visible:outline-none">
                                     <fieldset disabled={!isEditingBooking} className="border-none p-0 m-0 min-w-0 w-full space-y-4">
-                                        <div>
-                                            <p><strong className="text-zinc-100">Mã Booking:</strong> {selectedBooking.code}</p>
-                                            <p><strong className="text-zinc-100">Khách hàng:</strong> {selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</p>
-                                            <p><strong className="text-zinc-100">Nguồn:</strong> <span className="uppercase">{selectedBooking.source}</span></p>
+                                        <div className="text-zinc-300 space-y-2 mb-4 bg-zinc-900/50 p-4 rounded-md border border-zinc-800">
+                                            <p><strong className="text-zinc-400 w-32 inline-block">Mã Booking:</strong> <span className="text-white font-bold">{selectedBooking.code}</span></p>
+                                            <p><strong className="text-zinc-400 w-32 inline-block">Khách hàng:</strong> <span className="text-blue-400 font-medium">{selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</span></p>
+                                            <p><strong className="text-zinc-400 w-32 inline-block">Nguồn:</strong> <span className="uppercase text-white font-medium">{selectedBooking.source}</span></p>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2">
@@ -964,25 +964,25 @@ export default function CalendarPage() {
                             </Tabs>
 
                             <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-800 mt-2">
-                                <Button variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setSelectedBooking(null)}>Đóng</Button>
+                                <Button variant="outline" className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setSelectedBooking(null)}>Đóng</Button>
 
                                 <div className="flex flex-wrap gap-2 items-center">
                                     {!isEditingBooking ? (
                                         <>
-                                            <Button variant="outline" className="border-teal-900/50 text-teal-400 hover:bg-teal-900/20" onClick={() => handlePrint('invoice')}>
+                                            <Button variant="outline" className="bg-zinc-900 border-teal-900/50 text-teal-400 hover:bg-teal-900/20" onClick={() => handlePrint('invoice')}>
                                                 In Hóa đơn
                                             </Button>
 
-                                            <Button variant="outline" className="border-teal-900/50 text-teal-400 hover:bg-teal-900/20" onClick={() => handlePrint('deposit')}>
+                                            <Button variant="outline" className="bg-zinc-900 border-teal-900/50 text-teal-400 hover:bg-teal-900/20" onClick={() => handlePrint('deposit')}>
                                                 In Phiếu đặt cọc
                                             </Button>
 
-                                            <Button variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={(e) => { e.preventDefault(); setIsEditingBooking(true); }}>
+                                            <Button variant="outline" className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={(e) => { e.preventDefault(); setIsEditingBooking(true); }}>
                                                 Chỉnh sửa
                                             </Button>
 
                                             {(editBookingData.status === 'CHECKED_IN') && (
-                                                <Button variant="outline" className="text-violet-400 border-violet-900/50 hover:bg-violet-900/20" onClick={() => handleRequestCleaning()}>
+                                                <Button variant="outline" className="bg-zinc-900 text-violet-400 border-violet-900/50 hover:bg-violet-900/20" onClick={() => handleRequestCleaning()}>
                                                     Yêu cầu Dọn phòng
                                                 </Button>
                                             )}
@@ -1007,10 +1007,10 @@ export default function CalendarPage() {
                                         </>
                                     ) : (
                                         <>
-                                            <Button variant="outline" className="border-red-900/50 text-red-400 hover:bg-red-900/20" onClick={() => handleDeleteBooking()}>
+                                            <Button variant="outline" className="bg-zinc-900 border-red-900/50 text-red-400 hover:bg-red-900/20" onClick={() => handleDeleteBooking()}>
                                                 Xóa đơn
                                             </Button>
-                                            <Button variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setIsEditingBooking(false)}>Hủy</Button>
+                                            <Button variant="outline" className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setIsEditingBooking(false)}>Hủy</Button>
                                             <Button variant="secondary" className="bg-zinc-800 text-white hover:bg-zinc-700" onClick={() => handleSaveBookingEdit()}>Lưu thay đổi</Button>
                                         </>
                                     )}
