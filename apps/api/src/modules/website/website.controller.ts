@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Param, Body, Query } from '@nestjs/common';
 import { WebsiteService } from './website.service';
 
-@Controller('api')
+@Controller('')
 export class WebsiteController {
     constructor(private readonly websiteService: WebsiteService) { }
 

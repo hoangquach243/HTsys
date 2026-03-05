@@ -42,8 +42,8 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const [cfgRes, roomsRes] = await Promise.all([
-          fetch(`${API_URL}/api/public/${SLUG}`),
-          fetch(`${API_URL}/api/public/${SLUG}/rooms`),
+          fetch(`${API_URL}/api/public/${SLUG}`, { cache: 'no-store' }),
+          fetch(`${API_URL}/api/public/${SLUG}/rooms`, { cache: 'no-store' }),
         ]);
         if (cfgRes.ok) setConfig(await cfgRes.json());
         if (roomsRes.ok) setRoomTypes(await roomsRes.json());
@@ -60,7 +60,7 @@ export default function HomePage() {
     setSearching(true);
     setSearched(false);
     try {
-      const res = await fetch(`${API_URL}/api/public/${SLUG}/availability?checkIn=${checkIn}&checkOut=${checkOut}`);
+      const res = await fetch(`${API_URL}/api/public/${SLUG}/availability?checkIn=${checkIn}&checkOut=${checkOut}`, { cache: 'no-store' });
       if (res.ok) {
         setAvailability(await res.json());
         setSearched(true);
