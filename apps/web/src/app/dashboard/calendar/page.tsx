@@ -136,7 +136,10 @@ export default function CalendarPage() {
         setStartDate(new Date(startDate));
     }
 
-    const getStatusColor = (status: string) => {
+    const getStatusColor = (status: string, source?: string) => {
+        if (status === 'NEW' && source === 'WEBSITE') {
+            return 'bg-orange-500 border-orange-600 text-white shadow-md ring-2 ring-orange-300 ring-offset-1 font-bold';
+        }
         switch (status) {
             case 'NEW': return 'bg-blue-500/20 border-blue-500/30 text-blue-400';
             case 'CONFIRMED': return 'bg-purple-500/20 border-purple-500/30 text-purple-400';
@@ -775,7 +778,7 @@ export default function CalendarPage() {
                                                                         e.stopPropagation();
                                                                         handleSelectBooking(booking);
                                                                     }}
-                                                                    className={`absolute top-2 bottom-2 rounded-md border p-1.5 overflow-hidden flex flex-col cursor-pointer hover:brightness-110 shadow-sm transition-all z-20 ${getStatusColor(booking.status)}`}
+                                                                    className={`absolute top-2 bottom-2 rounded-md border p-1.5 overflow-hidden flex flex-col cursor-pointer shadow-sm transition-all z-20 ${getStatusColor(booking.status, booking.source)} hover:brightness-110`}
                                                                     style={{
                                                                         left: `${leftPercent}%`,
                                                                         width: `calc(${widthPercent}%)`, // Exact exact fractional width
