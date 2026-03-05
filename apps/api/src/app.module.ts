@@ -15,6 +15,7 @@ import { AutomationModule } from './modules/automation/automation.module';
 import { OtaModule } from './modules/ota/ota.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { WebsiteModule } from './modules/website/website.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     OtaModule,
     SettingsModule,
     DashboardModule,
+    WebsiteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

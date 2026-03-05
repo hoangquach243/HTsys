@@ -49,6 +49,7 @@ model Property {
   emailTemplates EmailTemplate[]
   emailFlows     EmailFlow[]
   printTemplates PrintTemplate[]
+  websiteConfig  WebsiteConfig?
 
   @@map("properties")
 }
@@ -641,4 +642,40 @@ model PrintTemplate {
 
   @@unique([propertyId, type])
   @@map("print_templates")
+}
+
+// ============================================
+// WEBSITE CONFIG — Client Booking Page
+// ============================================
+model WebsiteConfig {
+  id              String   @id @default(cuid())
+  propertyId      String   @unique
+  slug            String   @unique  // Used as URL identifier, e.g., "my-hotel"
+  isPublished     Boolean  @default(false)
+  hotelName       String?
+  tagline         String?
+  description     String?  @db.Text
+  address         String?
+  phone           String?
+  email           String?
+  logoUrl         String?
+  bannerUrl       String?
+  primaryColor    String   @default("#2563eb") // hex color
+  accentColor     String   @default("#10b981")
+  gallery         Json?    // Array of image URLs
+  promotions      Json?    // Array of { title, description, discount, validUntil }
+  amenities       Json?    // Array of strings
+  checkInTime     String   @default("14:00")
+  checkOutTime    String   @default("12:00")
+  googleMapsUrl   String?
+  facebookUrl     String?
+  instagramUrl    String?
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("website_configs")
 }
