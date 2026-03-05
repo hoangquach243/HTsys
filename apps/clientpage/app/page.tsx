@@ -106,8 +106,18 @@ export default function HomePage() {
   const hotelName = config?.hotelName || config?.property?.name || 'Khách sạn của chúng tôi';
   const tagline = config?.tagline || 'Nơi nghỉ ngơi lý tưởng cho bạn';
   const description = config?.description || 'Chào mừng bạn đến với không gian nghỉ dưỡng tuyệt vời của chúng tôi.';
-  const amenities: string[] = config?.amenities || ['Wifi miễn phí', 'Bãi đỗ xe', 'Bữa sáng', 'Gym'];
-  const promotions: any[] = config?.promotions || [];
+  let amenities: string[] = ['Wifi miễn phí', 'Bãi đỗ xe', 'Bữa sáng', 'Gym'];
+  if (config?.amenities) {
+    try {
+      amenities = typeof config.amenities === 'string' ? JSON.parse(config.amenities) : config.amenities;
+    } catch (e) { }
+  }
+  let promotions: any[] = [];
+  if (config?.promotions) {
+    try {
+      promotions = typeof config.promotions === 'string' ? JSON.parse(config.promotions) : config.promotions;
+    } catch (e) { }
+  }
 
   if (loading) {
     return (
