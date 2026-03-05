@@ -200,6 +200,52 @@ export default function CalendarPage() {
         }
     };
 
+    const handleCheckout = async () => {
+        if (!selectedBooking) return;
+
+        try {
+            const now = new Date();
+            const checkInDate = new Date(selectedBooking.checkIn);
+
+            // Calculate nights stayed up to now
+            let calcNights = Math.ceil((now.getTime() - checkInDate.getTime()) / (1000 * 3600 * 24));
+            calcNights = Math.max(1, calcNights); // At least 1 night
+
+            // Calculate original room rate
+            const origCheckOut = new Date(selectedBooking.checkOut);
+            const origNights = Math.max(1, differenceInDays(origCheckOut, checkInDate));
+            const servicesSum = bookingServices.reduce((a, b) => a + b.amount, 0);
+            const origRoomTotal = Math.max(0, Number(selectedBooking.totalAmount || 0) - servicesSum);
+            const roomRate = origRoomTotal / origNights;
+
+            // Recalculate new total
+            const newTotal = (roomRate * calcNights) + servicesSum;
+
+            const payload = {
+                status: 'CHECKED_OUT',
+                checkOut: now.toISOString(),
+                totalAmount: newTotal
+            };
+
+            const res = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                setSelectedBooking(null);
+                refreshData();
+                alert(`Đã Check-out thành công. Hệ thống chốt số đêm thực tế là ${calcNights} đêm.`);
+            } else {
+                const err = await res.json();
+                alert("Lỗi khi Check-out: " + err.message);
+            }
+        } catch (error) {
+            alert("Lỗi mạng khi Check-out");
+        }
+    };
+
     const handleDeleteBooking = async () => {
         if (!selectedBooking) return;
         if (!window.confirm("Bạn có chắc chắn muốn xóa đơn đặt phòng này? Hành động này không thể hoàn tác.")) return;
@@ -947,9 +993,15 @@ export default function CalendarPage() {
                                                 </Button>
                                             )}
 
+                                            {editBookingData.paymentStatus !== 'PAID' && editBookingData.status !== 'CANCELLED' && (
+                                                <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleSaveBookingEdit(undefined, 'PAID')}>
+                                                    Xác nhận thu tiền
+                                                </Button>
+                                            )}
+
                                             {editBookingData.status === 'CHECKED_IN' && (
-                                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleSaveBookingEdit('CHECKED_OUT', 'PAID')}>
-                                                    Thu tiền nốt & Check-out
+                                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleCheckout}>
+                                                    Check-out trả phòng
                                                 </Button>
                                             )}
                                         </>
