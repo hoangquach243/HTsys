@@ -153,7 +153,7 @@ export default function CalendarPage() {
     }
 
     const getStatusColor = (status: string, source?: string) => {
-        if (status === 'NEW' && source === 'WEBSITE') {
+        if (status === 'NEW' && source && source.toLowerCase() !== 'walk-in') {
             return 'bg-orange-500 border-orange-600 text-white shadow-md ring-2 ring-orange-300 ring-offset-1 font-bold';
         }
         switch (status) {
@@ -873,10 +873,16 @@ export default function CalendarPage() {
                                 </TabsList>
                                 <TabsContent value="info" className="mt-0 focus-visible:outline-none">
                                     <fieldset disabled={!isEditingBooking} className="border-none p-0 m-0 min-w-0 w-full space-y-4">
-                                        <div className="text-zinc-300 space-y-2 mb-4 bg-zinc-900/50 p-4 rounded-md border border-zinc-800">
+                                        <div className="text-zinc-300 space-y-2 mb-4 bg-zinc-900/50 p-4 rounded-md border border-zinc-800 relative overflow-hidden">
+                                            {selectedBooking.source !== 'walk-in' && selectedBooking.status === 'NEW' && (
+                                                <div className="absolute top-0 right-0 bg-orange-500/20 text-orange-400 text-xs px-3 py-1 font-semibold rounded-bl-lg border-b border-l border-orange-500/30">
+                                                    CẦN XÁC NHẬN
+                                                </div>
+                                            )}
                                             <p><strong className="text-zinc-400 w-32 inline-block">Mã Booking:</strong> <span className="text-white font-bold">{selectedBooking.code}</span></p>
                                             <p><strong className="text-zinc-400 w-32 inline-block">Khách hàng:</strong> <span className="text-blue-400 font-medium">{selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</span></p>
-                                            <p><strong className="text-zinc-400 w-32 inline-block">Nguồn:</strong> <span className="uppercase text-white font-medium">{selectedBooking.source}</span></p>
+                                            <p><strong className="text-zinc-400 w-32 inline-block">Nguồn:</strong> <span className="uppercase text-white font-medium">{selectedBooking.source === 'walk-in' ? 'Khách lẻ / Trực tiếp' : selectedBooking.source}</span></p>
+                                            <p><strong className="text-zinc-400 w-32 inline-block">TG Tạo đơn:</strong> <span className="text-zinc-300">{format(new Date(selectedBooking.createdAt || new Date()), "HH:mm - dd/MM/yyyy")}</span></p>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2">
