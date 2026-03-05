@@ -268,26 +268,86 @@ export default function CalendarPage() {
         }
     };
 
+    const getDefaultTemplate = (type: string): string => {
+        if (type === 'invoice') {
+            return [
+                '<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #333;">',
+                '<div style="text-align: center; margin-bottom: 30px;">',
+                '<h1 style="color: #1a56db; margin: 0;">HÓA ĐƠN THANH TOÁN</h1>',
+                '<p>Ngày in: {{printDate}}</p></div>',
+                '<div style="display:flex;justify-content:space-between;margin-bottom:30px;border-bottom:1px solid #eee;padding-bottom:20px;">',
+                '<div><h3>Thông tin Khách sạn</h3><p><strong>Tên:</strong> {{propertyName}}</p><p><strong>Hotline:</strong> {{propertyPhone}}</p><p><strong>Địa chỉ:</strong> {{propertyAddress}}</p></div>',
+                '<div style="text-align:right"><h3>Thông tin Khách hàng</h3><p><strong>Tên khách:</strong> {{guestName}}</p><p><strong>SĐT:</strong> {{guestPhone}}</p><p><strong>Mã ĐP:</strong> {{bookingCode}}</p></div>',
+                '</div>',
+                '<table style="width:100%;border-collapse:collapse;margin-bottom:30px">',
+                '<thead><tr style="background:#f8fafc">',
+                '<th style="padding:12px;border:1px solid #e2e8f0">Hạng mục</th>',
+                '<th style="padding:12px;border:1px solid #e2e8f0;text-align:center">SL</th>',
+                '<th style="padding:12px;border:1px solid #e2e8f0;text-align:right">Đơn giá</th>',
+                '<th style="padding:12px;border:1px solid #e2e8f0;text-align:right">Thành tiền</th>',
+                '</tr></thead><tbody>',
+                '<tr><td style="padding:12px;border:1px solid #e2e8f0">Tiền phòng ({{roomName}})</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:center">{{nights}} đêm</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:right">{{roomPrice}} đ</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:right">{{roomTotal}} đ</td></tr>',
+                '{{servicesList}}</tbody>',
+                '<tfoot><tr style="background:#f8fafc;font-weight:bold">',
+                '<td colspan="3" style="padding:12px;border:1px solid #e2e8f0;text-align:right">TỔNG CỘNG:</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:right;color:#ea580c">{{grandTotal}} đ</td></tr>',
+                '<tr><td colspan="3" style="padding:12px;border:1px solid #e2e8f0;text-align:right">Đã thanh toán:</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:right">{{paidAmount}} đ</td></tr>',
+                '<tr style="background:#f8fafc;font-weight:bold"><td colspan="3" style="padding:12px;border:1px solid #e2e8f0;text-align:right">CÒN LẠI:</td>',
+                '<td style="padding:12px;border:1px solid #e2e8f0;text-align:right;color:#b91c1c">{{balanceDue}} đ</td></tr>',
+                '</tfoot></table>',
+                '<div style="display:flex;justify-content:space-between;margin-top:50px">',
+                '<div style="text-align:center;width:50%"><p><strong>Khách hàng</strong></p><p style="font-style:italic;color:#666;font-size:12px">(Ký &amp; ghi rõ họ tên)</p></div>',
+                '<div style="text-align:center;width:50%"><p><strong>Lễ tân</strong></p><p style="font-style:italic;color:#666;font-size:12px">(Ký &amp; ghi rõ họ tên)</p></div>',
+                '</div>',
+                '<div style="text-align:center;margin-top:80px;font-size:12px;color:#888"><p>Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!</p></div>',
+                '</div>'
+            ].join('\n');
+        }
+        return [
+            '<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #333;">',
+            '<div style="text-align: center; margin-bottom: 30px;">',
+            '<h1 style="color: #10b981; margin: 0;">PHIẾU XÁC NHẬN ĐẶT CỌC</h1>',
+            '<p>Ngày in: {{printDate}}</p></div>',
+            '<div style="border:2px dashed #10b981;padding:20px;border-radius:8px;margin-bottom:30px;background:#f0fdf4">',
+            '<h2 style="text-align:center;margin-top:0;color:#047857">SỐ TIỀN CỌC: {{paidAmount}} VND</h2>',
+            '</div>',
+            '<div style="display:flex;justify-content:space-between;margin-bottom:30px">',
+            '<div style="width:48%"><h3>Thông tin Khách sạn</h3><p><strong>Tên:</strong> {{propertyName}}</p><p><strong>Hotline:</strong> {{propertyPhone}}</p></div>',
+            '<div style="width:48%"><h3>Thông tin Khách hàng</h3><p><strong>Tên khách:</strong> {{guestName}}</p><p><strong>SĐT:</strong> {{guestPhone}}</p></div>',
+            '</div>',
+            '<h3>Chi tiết Đặt phòng (Mã: {{bookingCode}})</h3>',
+            '<table style="width:100%;border-collapse:collapse;margin-bottom:30px"><tbody>',
+            '<tr><td style="padding:10px;border-bottom:1px solid #eee"><strong>Phòng:</strong></td><td style="padding:10px;border-bottom:1px solid #eee">{{roomName}}</td></tr>',
+            '<tr><td style="padding:10px;border-bottom:1px solid #eee"><strong>Nhận phòng:</strong></td><td style="padding:10px;border-bottom:1px solid #eee">{{checkInDate}} ({{checkInTime}})</td></tr>',
+            '<tr><td style="padding:10px;border-bottom:1px solid #eee"><strong>Trả phòng:</strong></td><td style="padding:10px;border-bottom:1px solid #eee">{{checkOutDate}} ({{checkOutTime}})</td></tr>',
+            '<tr><td style="padding:10px;border-bottom:1px solid #eee"><strong>Tổng tiền:</strong></td><td style="padding:10px;border-bottom:1px solid #eee;font-weight:bold">{{grandTotal}} VND</td></tr>',
+            '<tr><td style="padding:10px;border-bottom:1px solid #eee;color:#b91c1c"><strong>Còn phải thu:</strong></td><td style="padding:10px;border-bottom:1px solid #eee;font-weight:bold;color:#b91c1c">{{balanceDue}} VND</td></tr>',
+            '</tbody></table>',
+            '<div style="display:flex;justify-content:space-between;margin-top:50px">',
+            '<div style="text-align:center;width:50%"><p><strong>Khách hàng</strong></p><p style="font-style:italic;color:#666;font-size:12px">(Ký &amp; ghi rõ họ tên)</p></div>',
+            '<div style="text-align:center;width:50%"><p><strong>Đại diện Khách sạn</strong></p><p style="font-style:italic;color:#666;font-size:12px">(Ký &amp; ghi rõ họ tên)</p></div>',
+            '</div></div>'
+        ].join('\n');
+    };
+
     const handlePrint = async (type: string) => {
         try {
             const res = await fetch(`http://localhost:3001/api/settings/print-templates/type/${type}?propertyId=clouq2m1q00003b6w5z8s6xy9`);
-            if (!res.ok) {
-                alert("Lỗi máy chủ khi tải mẫu in");
-                return;
-            }
-            const textResponse = await res.text();
-            if (!textResponse) {
-                alert("Mẫu in chưa được cấu hình. Vui lòng vào Cài đặt -> Mẫu in ấn.");
-                return;
-            }
-            const templateData = JSON.parse(textResponse);
+            let content = getDefaultTemplate(type); // start with default
 
-            if (!templateData || !templateData.content) {
-                alert("Mẫu in chưa được cấu hình. Vui lòng vào Cài đặt -> Mẫu in ấn.");
-                return;
+            if (res.ok) {
+                const textResponse = await res.text();
+                if (textResponse) {
+                    const templateData = JSON.parse(textResponse);
+                    if (templateData && templateData.content) {
+                        content = templateData.content; // override with custom if exists
+                    }
+                }
             }
-
-            let content = templateData.content;
 
             const today = new Date();
             const formatVND = (val: number) => val.toLocaleString('vi-VN');
