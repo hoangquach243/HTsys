@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, SlidersHorizontal, Plus, MoreHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, MoreHorizontal, ConciergeBell } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Select as UISelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 const TEST_PROPERTY_ID = 'clouq2m1q00003b6w5z8s6xy9';
 
@@ -16,26 +20,99 @@ export default function BookingsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [refetchTrigger, setRefetchTrigger] = useState(0);
+
+    // Modal state for adding services
+    const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+    const [selectedBookingForService, setSelectedBookingForService] = useState<any>(null);
+    const [availableServices, setAvailableServices] = useState<any[]>([]);
+    const [serviceForm, setServiceForm] = useState({ serviceId: '', quantity: 1, amount: 0 });
+
+    const fetchBookings = async () => {
+        try {
+            setLoading(true);
+            let url = `http://localhost:3001/api/bookings?limit=20`;
+            if (search) url += `&search=${search}`;
+            if (statusFilter) url += `&status=${statusFilter}`;
+
+            const res = await fetch(url);
+            const json = await res.json();
+            setBookings(json.data || []);
+        } catch (error) {
+            console.error("Failed to load bookings", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                setLoading(true);
-                let url = `http://localhost:3001/api/bookings?limit=20`;
-                if (search) url += `&search=${search}`;
-                if (statusFilter) url += `&status=${statusFilter}`;
-
-                const res = await fetch(url);
-                const json = await res.json();
-                setBookings(json.data || []);
-            } catch (error) {
-                console.error("Failed to load bookings", error);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchBookings();
-    }, [search, statusFilter]);
+    }, [search, statusFilter, refetchTrigger]);
+
+    const fetchAvailableServices = async () => {
+        try {
+            const res = await fetch(`http://localhost:3001/api/services?propertyId=${TEST_PROPERTY_ID}&isActive=true`);
+            const data = await res.json();
+            setAvailableServices(data);
+        } catch (error) {
+            console.error("Failed to load services", error);
+        }
+    };
+
+    const handleOpenServiceModal = (booking: any) => {
+        setSelectedBookingForService(booking);
+        setServiceForm({ serviceId: '', quantity: 1, amount: 0 });
+        setIsServiceModalOpen(true);
+        if (availableServices.length === 0) {
+            fetchAvailableServices();
+        }
+    };
+
+    const handleServiceSelect = (serviceId: string) => {
+        const s = availableServices.find(x => x.id === serviceId);
+        if (s) {
+            setServiceForm(prev => ({ ...prev, serviceId, amount: s.price * prev.quantity }));
+        }
+    };
+
+    const handleQuantityChange = (q: number) => {
+        const qty = Math.max(1, q);
+        const s = availableServices.find(x => x.id === serviceForm.serviceId);
+        if (s) {
+            setServiceForm(prev => ({ ...prev, quantity: qty, amount: s.price * qty }));
+        } else {
+            setServiceForm(prev => ({ ...prev, quantity: qty }));
+        }
+    };
+
+    const handleAddService = async () => {
+        if (!serviceForm.serviceId || !selectedBookingForService) return;
+        try {
+            const s = availableServices.find(x => x.id === serviceForm.serviceId);
+            const payload = {
+                bookingId: selectedBookingForService.id,
+                serviceId: serviceForm.serviceId,
+                quantity: serviceForm.quantity,
+                unitPrice: s?.price || 0,
+                amount: serviceForm.amount,
+                note: ''
+            };
+            const res = await fetch(`http://localhost:3001/api/services/usages`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                toast.success('Đã thêm dịch vụ vào đơn đặt phòng!');
+                setIsServiceModalOpen(false);
+                setRefetchTrigger(prev => prev + 1);
+            } else {
+                toast.error('Lỗi khi thêm dịch vụ');
+            }
+        } catch (error) {
+            toast.error('Lỗi kết nối máy chủ');
+        }
+    };
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -167,9 +244,18 @@ export default function BookingsPage() {
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                    <DropdownMenuItem className="focus:bg-zinc-800 focus:text-white cursor-pointer" onClick={() => handleOpenServiceModal(booking)}>
+                                                        <ConciergeBell className="mr-2 h-4 w-4" /> Thêm Dịch vụ
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -178,6 +264,70 @@ export default function BookingsPage() {
                     </Table>
                 </CardContent >
             </Card >
-        </div >
+
+            {/* Modal Thêm Dịch Vụ */}
+            <Dialog open={isServiceModalOpen} onOpenChange={setIsServiceModalOpen}>
+                <DialogContent className="bg-zinc-950 border-zinc-800 text-white sm:max-w-[450px]">
+                    <DialogHeader>
+                        <DialogTitle>Thêm Dịch vụ / Phụ thu</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-4 space-y-4">
+                        <div className="bg-zinc-900 border border-zinc-800 p-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <span className="text-xs text-zinc-500 block uppercase">Đặt phòng</span>
+                                <span className="font-bold text-white">{selectedBookingForService?.code}</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-xs text-zinc-500 block uppercase">Khách hàng</span>
+                                <span className="font-medium text-white">{selectedBookingForService?.guest?.name || 'Walk-in'}</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-medium text-zinc-400">Chọn Dịch vụ <span className="text-rose-500">*</span></label>
+                            <UISelect value={serviceForm.serviceId} onValueChange={handleServiceSelect}>
+                                <SelectTrigger className="w-full bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    <SelectValue placeholder="Chọn dịch vụ/phụ thu..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {availableServices.map(s => (
+                                        <SelectItem key={s.id} value={s.id}>
+                                            {s.name} - {s.price.toLocaleString('vi-VN')}₫/lần
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </UISelect>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-zinc-400">Số lượng <span className="text-rose-500">*</span></label>
+                                <Input
+                                    type="number"
+                                    min="1"
+                                    value={serviceForm.quantity}
+                                    onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                                    className="bg-zinc-900 border-zinc-800 text-zinc-100"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-zinc-400">Thành tiền (VND)</label>
+                                <Input
+                                    readOnly
+                                    value={serviceForm.amount.toLocaleString('vi-VN')}
+                                    className="bg-zinc-900 border-zinc-800 font-bold text-emerald-400 cursor-not-allowed opacity-80"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-800" onClick={() => setIsServiceModalOpen(false)}>Hủy</Button>
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white" disabled={!serviceForm.serviceId} onClick={handleAddService}>
+                            Lưu Dịch Vụ
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 }

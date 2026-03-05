@@ -6,7 +6,7 @@ import { CreditCard, Search, Filter, Download, ArrowUpRight } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function PaymentsPage() {
+export default function ReceiptsPage() {
     const [payments, setPayments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -56,9 +56,9 @@ export default function PaymentsPage() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-2xl font-bold font-serif text-white flex items-center gap-2">
-                        <CreditCard className="w-6 h-6 text-emerald-500" /> Lịch sử Thanh toán
+                        <CreditCard className="w-6 h-6 text-emerald-500" /> Danh sách Phiếu Thu
                     </h1>
-                    <p className="text-zinc-400 text-sm mt-1">Quản lý giao dịch và doanh thu đã thu từ khách hàng</p>
+                    <p className="text-zinc-400 text-sm mt-1">Danh sách những lần nhận tiền vào (tiền cọc, thanh toán)</p>
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
                     <div className="relative flex-1 md:w-64">
@@ -98,7 +98,7 @@ export default function PaymentsPage() {
                         <tbody className="divide-y divide-zinc-800/50 text-zinc-300">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={9} className="px-4 py-8 text-center text-zinc-500">Đang tải dữ liệu thanh toán...</td>
+                                    <td colSpan={9} className="px-4 py-8 text-center text-zinc-500">Đang tải biểu dữ liệu phiếu thu...</td>
                                 </tr>
                             ) : filteredPayments.length > 0 ? (
                                 filteredPayments.map(payment => (

@@ -48,6 +48,7 @@ model Property {
   otaChannels    OtaChannel[]
   emailTemplates EmailTemplate[]
   emailFlows     EmailFlow[]
+  printTemplates PrintTemplate[]
 
   @@map("properties")
 }
@@ -621,4 +622,23 @@ model BankAccount {
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("bank_accounts")
+}
+
+// ============================================
+// TEMPLATES — Print & Export
+// ============================================
+model PrintTemplate {
+  id         String   @id @default(cuid())
+  propertyId String
+  name       String
+  type       String   // e.g., "invoice", "deposit"
+  content    String   @db.Text
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, type])
+  @@map("print_templates")
 }

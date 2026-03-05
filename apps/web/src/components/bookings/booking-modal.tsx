@@ -30,6 +30,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
     const [newGuestName, setNewGuestName] = useState('');
     const [newGuestPhone, setNewGuestPhone] = useState('');
     const [isNewGuest, setIsNewGuest] = useState(false);
+    const [source, setSource] = useState<string>('walk-in');
 
     const [checkIn, setCheckIn] = useState<string>('');
     const [checkOut, setCheckOut] = useState<string>('');
@@ -115,20 +116,13 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
                 return;
             }
 
-            // 2. Create Booking
-            let paymentStatus = 'UNPAID';
-            if (paidAmount > 0 && paidAmount < totalAmount) paymentStatus = 'PARTIAL';
-            if (paidAmount >= totalAmount && totalAmount > 0) paymentStatus = 'PAID';
-
             const payload = {
                 guestId: finalGuestId,
                 propertyId: 'clouq2m1q00003b6w5z8s6xy9', // Using the correct property
-                source: 'walk-in',
+                source: source,
                 checkIn: new Date(checkIn).toISOString(),
                 checkOut: new Date(checkOut).toISOString(),
                 totalAmount: totalAmount,
-                paidAmount: paidAmount,
-                paymentStatus: paymentStatus,
                 rooms: initialData?.roomTypeId ? [{
                     roomTypeId: initialData.roomTypeId,
                     roomId: initialData.roomId,
@@ -145,6 +139,22 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
             });
 
             if (bookRes.ok) {
+                const bookData = await bookRes.json();
+                const bookingId = bookData.id || bookData.data?.id;
+
+                // Create initial payment if paidAmount > 0
+                if (paidAmount > 0 && bookingId) {
+                    await fetch(`http://localhost:3001/api/bookings/${bookingId}/payments`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            amount: paidAmount,
+                            method: 'cash',
+                            note: 'Khách thanh toán trước/đặt cọc'
+                        })
+                    }).catch(console.error);
+                }
+
                 onSuccess();
                 onClose();
             } else {
@@ -196,10 +206,30 @@ export function BookingModal({ isOpen, onClose, onSuccess, initialData }: Bookin
                             )}
                         </div>
 
-                        {/* Room Info */}
-                        <div className="space-y-2">
-                            <Label>Phòng được chọn</Label>
-                            <Input readOnly value={initialData?.roomName || 'Chưa chọn'} className="bg-zinc-900 border-zinc-800 text-zinc-400" />
+                        {/* Room Info and Source */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Phòng được chọn</Label>
+                                <Input readOnly value={initialData?.roomName || 'Chưa chọn'} className="bg-zinc-900 border-zinc-800 text-zinc-400" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Nguồn khách</Label>
+                                <Select value={source} onValueChange={setSource}>
+                                    <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                        <SelectValue placeholder="Chọn nguồn..." />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                        <SelectItem value="walk-in">Khách lẻ (Walk-in)</SelectItem>
+                                        <SelectItem value="booking.com">Booking.com</SelectItem>
+                                        <SelectItem value="agoda">Agoda</SelectItem>
+                                        <SelectItem value="traveloka">Traveloka</SelectItem>
+                                        <SelectItem value="facebook">Facebook</SelectItem>
+                                        <SelectItem value="zalo">Zalo</SelectItem>
+                                        <SelectItem value="website">Website</SelectItem>
+                                        <SelectItem value="other">Khác</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
 
                         {/* Dates */}

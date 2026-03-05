@@ -6,7 +6,8 @@ import {
     CreatePaymentMethodDto, UpdatePaymentMethodDto,
     CreateBankAccountDto, UpdateBankAccountDto,
     CreateBookingSourceDto, UpdateBookingSourceDto,
-    CreateLabelDto, UpdateLabelDto
+    CreateLabelDto, UpdateLabelDto,
+    CreatePrintTemplateDto, UpdatePrintTemplateDto
 } from './dto/settings.dto';
 
 @Controller('settings')
@@ -128,5 +129,36 @@ export class SettingsController {
     @Delete('categories/:id')
     deleteCategory(@Param('id') id: string) {
         return this.settingsService.deleteCategory(id);
+    }
+
+    // ===== PRINT TEMPLATES =====
+    @Get('print-templates')
+    getPrintTemplates(@Query('propertyId') propertyId: string) {
+        return this.settingsService.getPrintTemplates(propertyId);
+    }
+
+    @Get('print-templates/:id')
+    getPrintTemplateById(@Param('id') id: string) {
+        return this.settingsService.getPrintTemplateById(id);
+    }
+
+    @Get('print-templates/type/:type')
+    getPrintTemplateByType(@Param('type') type: string, @Query('propertyId') propertyId: string) {
+        return this.settingsService.getPrintTemplateByType(propertyId, type);
+    }
+
+    @Post('print-templates')
+    createPrintTemplate(@Body() dto: CreatePrintTemplateDto) {
+        return this.settingsService.createPrintTemplate(dto);
+    }
+
+    @Patch('print-templates/:id')
+    updatePrintTemplate(@Param('id') id: string, @Body() dto: UpdatePrintTemplateDto) {
+        return this.settingsService.updatePrintTemplate(id, dto);
+    }
+
+    @Delete('print-templates/:id')
+    deletePrintTemplate(@Param('id') id: string) {
+        return this.settingsService.deletePrintTemplate(id);
     }
 }

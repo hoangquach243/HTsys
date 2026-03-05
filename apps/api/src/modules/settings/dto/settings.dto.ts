@@ -87,3 +87,34 @@ export class UpdateCategoryDto {
     @IsString()
     type?: string;
 }
+
+export class CreatePrintTemplateDto {
+    @IsString()
+    name: string;
+
+    @IsString()
+    type: string;
+
+    @IsString()
+    content: string;
+
+    @IsString()
+    propertyId: string;
+}
+
+export class UpdatePrintTemplateDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
+
+    @IsOptional()
+    @IsString()
+    type?: string;
+
+    @IsOptional()
+    @IsString()
+    content?: string;
+
+    @IsOptional()
+    isActive?: boolean;
+}

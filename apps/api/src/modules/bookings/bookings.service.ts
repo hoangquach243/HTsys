@@ -20,12 +20,14 @@ export class BookingsService {
 
         // Date range filtering
         if (startDate && endDate) {
-            where.checkIn = { gte: new Date(startDate) };
-            where.checkOut = { lte: new Date(endDate) };
+            where.AND = [
+                { checkIn: { lte: new Date(endDate) } },
+                { checkOut: { gte: new Date(startDate) } }
+            ];
         } else if (startDate) {
-            where.checkIn = { gte: new Date(startDate) };
+            where.checkOut = { gte: new Date(startDate) };
         } else if (endDate) {
-            where.checkOut = { lte: new Date(endDate) };
+            where.checkIn = { lte: new Date(endDate) };
         }
 
         // Fulltext search on booking code or guest name/phone

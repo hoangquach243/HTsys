@@ -91,7 +91,6 @@ const menuItems: MenuItem[] = [
         label: 'Tài chính',
         icon: Wallet,
         children: [
-            { label: 'Thanh toán', href: '/dashboard/finance/payments' },
             { label: 'Công nợ', href: '/dashboard/finance/receivables' },
             { label: 'Phiếu thu', href: '/dashboard/finance/receipts' },
             { label: 'Chi phí', href: '/dashboard/finance/expenses' },
@@ -134,6 +133,7 @@ const menuItems: MenuItem[] = [
         label: 'Cài đặt',
         icon: Settings,
         children: [
+            { label: 'Chung', href: '/dashboard/settings' },
             { label: 'Thông tin', href: '/dashboard/settings/info' },
             { label: 'Người dùng', href: '/dashboard/settings/users' },
             { label: 'Phân quyền', href: '/dashboard/settings/permissions' },
@@ -142,6 +142,7 @@ const menuItems: MenuItem[] = [
             { label: 'Nguồn', href: '/dashboard/settings/sources' },
             { label: 'PT Thanh toán', href: '/dashboard/settings/payment-methods' },
             { label: 'TK Ngân hàng', href: '/dashboard/settings/bank-accounts' },
+            { label: 'Mẫu in ấn', href: '/dashboard/settings/templates' },
         ],
     },
     {
@@ -217,7 +218,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </div>
 
             {/* Menu */}
-            <ScrollArea className="flex-1 px-3 py-4">
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-4 pb-24">
                 <nav className="flex flex-col gap-1">
                     {menuItems.map((item) => {
                         const Icon = item.icon;
@@ -307,7 +308,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                                                 href={child.href}
                                                 className={cn(
                                                     'rounded-md px-3 py-2 text-sm transition-colors',
-                                                    pathname.startsWith(child.href)
+                                                    pathname === child.href
                                                         ? 'bg-blue-600/10 text-blue-400 font-medium'
                                                         : 'text-zinc-500 hover:bg-zinc-800/30 hover:text-zinc-300'
                                                 )}
@@ -321,7 +322,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         );
                     })}
                 </nav>
-            </ScrollArea>
+            </div>
 
             {/* Footer */}
             {!collapsed && (

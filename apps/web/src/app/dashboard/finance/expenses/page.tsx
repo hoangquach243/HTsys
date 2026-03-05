@@ -21,6 +21,9 @@ export default function ExpensesPage() {
     const [categoryForm, setCategoryForm] = useState({ id: '', name: '' });
     const propertyId = 'clouq2m1q00003b6w5z8s6xy9';
 
+    const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
     const [formData, setFormData] = useState({
         id: '',
         title: '',
@@ -156,6 +159,29 @@ export default function ExpensesPage() {
         }
     };
 
+    const handleBatchDeleteExpenses = async () => {
+        if (!selectedExpenses.length) return;
+        if (!confirm(`Bạn có chắc chắn muốn xóa ${selectedExpenses.length} phiếu chi đã chọn? Hành động này không thể hoàn tác.`)) return;
+
+        try {
+            const promises = selectedExpenses.map(id => fetch(`http://localhost:3001/api/finance/expenses/${id}`, { method: 'DELETE' }));
+            const results = await Promise.all(promises);
+            const success = results.every(res => res.ok);
+
+            if (success) {
+                toast.success(`Đã xóa thành công ${selectedExpenses.length} phiếu chi`);
+                setSelectedExpenses([]);
+                fetchExpenses();
+            } else {
+                toast.error("Một số phiếu chi không thể xóa");
+                fetchExpenses();
+            }
+        } catch (error) {
+            toast.error("Lỗi kết nối máy chủ");
+            console.error(error);
+        }
+    };
+
     const handleSaveCategory = async () => {
         try {
             if (categoryForm.id) {
@@ -200,6 +226,28 @@ export default function ExpensesPage() {
         }
     };
 
+    const handleBatchDeleteCategories = async () => {
+        if (!selectedCategories.length) return;
+        if (!confirm(`Bạn có chắc muốn xóa ${selectedCategories.length} danh mục đã chọn?`)) return;
+        try {
+            const promises = selectedCategories.map(id => fetch(`http://localhost:3001/api/settings/categories/${id}`, { method: 'DELETE' }));
+            const results = await Promise.all(promises);
+            const success = results.every(res => res.ok);
+            if (success) {
+                toast.success(`Đã xóa thành công ${selectedCategories.length} danh mục`);
+                setSelectedCategories([]);
+                fetchCategories();
+                fetchExpenses();
+            } else {
+                toast.error("Một số danh mục không thể xóa");
+                fetchCategories();
+            }
+        } catch (error) {
+            toast.error("Lỗi kết nối máy chủ");
+            console.error(error);
+        }
+    };
+
     const filteredData = expenses.filter(e => {
         if (!searchTerm) return true;
         const term = searchTerm.toLowerCase();
@@ -221,6 +269,11 @@ export default function ExpensesPage() {
                     <p className="text-zinc-400 text-sm mt-1">Ghi nhận các khoản chi xuất khỏi quỹ tiền tệ</p>
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
+                    {selectedExpenses.length > 0 && (
+                        <Button className="bg-red-900/40 hover:bg-red-900/80 text-red-500 border border-red-900/30 whitespace-nowrap" onClick={handleBatchDeleteExpenses}>
+                            <Trash className="w-4 h-4 mr-2" /> Xóa ({selectedExpenses.length})
+                        </Button>
+                    )}
                     <div className="relative flex-1 md:w-64">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                         <Input
@@ -339,7 +392,18 @@ export default function ExpensesPage() {
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-zinc-900/50 text-zinc-400 text-xs uppercase">
                                     <tr>
-                                        <th className="px-4 py-3 font-medium">Mã Phiếu</th>
+                                        <th className="px-4 py-3 w-10">
+                                            <input
+                                                type="checkbox"
+                                                className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 accent-rose-500 cursor-pointer"
+                                                checked={filteredData.length > 0 && selectedExpenses.length === filteredData.length}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) setSelectedExpenses(filteredData.map(d => d.id));
+                                                    else setSelectedExpenses([]);
+                                                }}
+                                            />
+                                        </th>
+                                        <th className="px-4 py-3 font-medium">M Mã Phiếu</th>
                                         <th className="px-4 py-3 font-medium">Tên khoản chi</th>
                                         <th className="px-4 py-3 font-medium">Danh mục</th>
                                         <th className="px-4 py-3 font-medium text-right">Số tiền (VND)</th>
@@ -352,11 +416,25 @@ export default function ExpensesPage() {
                                 <tbody className="divide-y divide-zinc-800/50 text-zinc-300">
                                     {loading ? (
                                         <tr>
-                                            <td colSpan={8} className="px-4 py-8 text-center text-zinc-500">Đang tải biểu dữ liệu...</td>
+                                            <td colSpan={9} className="px-4 py-8 text-center text-zinc-500">Đang tải biểu dữ liệu...</td>
                                         </tr>
                                     ) : filteredData.length > 0 ? (
                                         filteredData.map(e => (
                                             <tr key={e.id} className="hover:bg-zinc-900/30 transition-colors group">
+                                                <td className="px-4 py-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 accent-rose-500 cursor-pointer"
+                                                        checked={selectedExpenses.includes(e.id)}
+                                                        onChange={(event) => {
+                                                            if (event.target.checked) {
+                                                                setSelectedExpenses(prev => [...prev, e.id]);
+                                                            } else {
+                                                                setSelectedExpenses(prev => prev.filter(id => id !== e.id));
+                                                            }
+                                                        }}
+                                                    />
+                                                </td>
                                                 <td className="px-4 py-3">
                                                     <div className="font-mono text-white text-xs bg-zinc-800 px-2 py-1 rounded inline-block">
                                                         {e.code || 'N/A'}
@@ -404,7 +482,7 @@ export default function ExpensesPage() {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={8} className="px-4 py-8 text-center text-zinc-500">Chưa có khoản chi nào được ghi nhận.</td>
+                                            <td colSpan={9} className="px-4 py-8 text-center text-zinc-500">Chưa có khoản chi nào được ghi nhận.</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -418,15 +496,33 @@ export default function ExpensesPage() {
                         <h2 className="text-lg font-medium text-white flex items-center gap-2">
                             <FolderOpen className="w-5 h-5 text-zinc-400" /> Cấu hình danh mục chi phí
                         </h2>
-                        <Button className="bg-zinc-800 hover:bg-zinc-700 text-white" onClick={() => { setCategoryForm({ id: '', name: '' }); setIsCategoryOpen(true); }}>
-                            <Plus className="w-4 h-4 mr-2" /> Thêm danh mục
-                        </Button>
+                        <div className="flex gap-2">
+                            {selectedCategories.length > 0 && (
+                                <Button className="bg-red-900/40 hover:bg-red-900/80 text-red-500 border border-red-900/30 whitespace-nowrap" onClick={handleBatchDeleteCategories}>
+                                    <Trash className="w-4 h-4 mr-2" /> Xóa ({selectedCategories.length})
+                                </Button>
+                            )}
+                            <Button className="bg-zinc-800 hover:bg-zinc-700 text-white" onClick={() => { setCategoryForm({ id: '', name: '' }); setIsCategoryOpen(true); }}>
+                                <Plus className="w-4 h-4 mr-2" /> Thêm danh mục
+                            </Button>
+                        </div>
                     </div>
 
                     <Card className="bg-zinc-950 border-zinc-800">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-zinc-900/50 text-zinc-400 text-xs uppercase">
                                 <tr>
+                                    <th className="px-4 py-3 w-10">
+                                        <input
+                                            type="checkbox"
+                                            className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 accent-rose-500 cursor-pointer"
+                                            checked={categories.length > 0 && selectedCategories.length === categories.length}
+                                            onChange={(e) => {
+                                                if (e.target.checked) setSelectedCategories(categories.map(c => c.id));
+                                                else setSelectedCategories([]);
+                                            }}
+                                        />
+                                    </th>
                                     <th className="px-4 py-3 font-medium">Tên danh mục</th>
                                     <th className="px-4 py-3 font-medium text-right">Phân loại hệ thống</th>
                                     <th className="px-4 py-3 font-medium text-right w-[100px]">Thao tác</th>
@@ -435,6 +531,20 @@ export default function ExpensesPage() {
                             <tbody className="divide-y divide-zinc-800/50 text-zinc-300">
                                 {categories.map(c => (
                                     <tr key={c.id} className="hover:bg-zinc-900/30">
+                                        <td className="px-4 py-3">
+                                            <input
+                                                type="checkbox"
+                                                className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 accent-rose-500 cursor-pointer"
+                                                checked={selectedCategories.includes(c.id)}
+                                                onChange={(event) => {
+                                                    if (event.target.checked) {
+                                                        setSelectedCategories(prev => [...prev, c.id]);
+                                                    } else {
+                                                        setSelectedCategories(prev => prev.filter(id => id !== c.id));
+                                                    }
+                                                }}
+                                            />
+                                        </td>
                                         <td className="px-4 py-3 font-medium text-white">{c.name}</td>
                                         <td className="px-4 py-3 text-right">
                                             <span className="text-xs bg-zinc-800 px-2 py-1 rounded text-zinc-400">Expense</span>
@@ -463,7 +573,7 @@ export default function ExpensesPage() {
                                 ))}
                                 {categories.length === 0 && (
                                     <tr>
-                                        <td colSpan={3} className="px-4 py-8 text-center text-zinc-500">Chưa có cấu hình danh mục nào.</td>
+                                        <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">Chưa có cấu hình danh mục nào.</td>
                                     </tr>
                                 )}
                             </tbody>

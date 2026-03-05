@@ -5,7 +5,8 @@ import {
     CreatePaymentMethodDto, UpdatePaymentMethodDto,
     CreateBankAccountDto, UpdateBankAccountDto,
     CreateBookingSourceDto, UpdateBookingSourceDto,
-    CreateLabelDto, UpdateLabelDto
+    CreateLabelDto, UpdateLabelDto,
+    CreatePrintTemplateDto, UpdatePrintTemplateDto
 } from './dto/settings.dto';
 
 @Injectable()
@@ -122,5 +123,40 @@ export class SettingsService {
 
     deleteCategory(id: string) {
         return this.prisma.category.delete({ where: { id } });
+    }
+
+    // ===== PRINT TEMPLATES =====
+    getPrintTemplates(propertyId: string) {
+        return this.prisma.printTemplate.findMany({ where: { propertyId }, orderBy: { createdAt: 'desc' } });
+    }
+
+    getPrintTemplateById(id: string) {
+        return this.prisma.printTemplate.findUnique({ where: { id } });
+    }
+
+    getPrintTemplateByType(propertyId: string, type: string) {
+        return this.prisma.printTemplate.findFirst({ where: { propertyId, type } });
+    }
+
+    async createPrintTemplate(dto: CreatePrintTemplateDto) {
+        // Enforce uniqueness per type/property
+        const existing = await this.prisma.printTemplate.findFirst({
+            where: { propertyId: dto.propertyId, type: dto.type }
+        });
+        if (existing) {
+            return this.prisma.printTemplate.update({
+                where: { id: existing.id },
+                data: dto
+            });
+        }
+        return this.prisma.printTemplate.create({ data: dto });
+    }
+
+    updatePrintTemplate(id: string, dto: UpdatePrintTemplateDto) {
+        return this.prisma.printTemplate.update({ where: { id }, data: dto });
+    }
+
+    deletePrintTemplate(id: string) {
+        return this.prisma.printTemplate.delete({ where: { id } });
     }
 }
