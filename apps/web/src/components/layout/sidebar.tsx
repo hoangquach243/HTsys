@@ -13,6 +13,7 @@ import {
     Wallet,
     BarChart3,
     ConciergeBell,
+    Bike,
     Hotel,
     Users,
     Globe,
@@ -60,16 +61,6 @@ const menuItems: MenuItem[] = [
         ],
     },
     {
-        label: 'Công việc',
-        icon: CheckSquare,
-        href: '/dashboard/tasks',
-    },
-    {
-        label: 'Tự động hóa',
-        icon: Zap,
-        href: '/dashboard/automation',
-    },
-    {
         label: 'Đặt phòng',
         icon: ClipboardList,
         href: '/dashboard/bookings',
@@ -113,6 +104,11 @@ const menuItems: MenuItem[] = [
         label: 'Dịch vụ',
         icon: ConciergeBell,
         href: '/dashboard/services',
+    },
+    {
+        label: 'Thuê xe',
+        icon: Bike,
+        href: '/dashboard/rentals',
     },
     {
         label: 'Quản lý phòng',

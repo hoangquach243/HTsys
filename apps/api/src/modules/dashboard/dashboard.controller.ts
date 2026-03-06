@@ -8,7 +8,9 @@ export class DashboardController {
     @Get('summary')
     getSummary(
         @Query('propertyId') propertyId: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string,
     ) {
-        return this.dashboardService.getDashboardSummary(propertyId);
+        return this.dashboardService.getDashboardSummary(propertyId, startDate, endDate);
     }
 }

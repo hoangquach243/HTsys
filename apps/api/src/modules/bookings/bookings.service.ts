@@ -81,7 +81,11 @@ export class BookingsService {
                 payments: true,
                 serviceUsages: {
                     include: { service: true }
-                }
+                },
+                vehicleRentals: {
+                    include: { vehicle: true }
+                },
+                tasks: true
             }
         });
 
@@ -283,8 +287,20 @@ export class BookingsService {
         return payment;
     }
 
-    async delete(id: string) {
+    async cancel(id: string, reason: string) {
         await this.findById(id); // Ensure exists
-        return this.prisma.booking.delete({ where: { id } });
+        // Find tasks linked and cancel them if necessary
+        await this.prisma.task.updateMany({
+            where: { bookingId: id, status: 'PENDING' },
+            data: { status: 'COMPLETED' }
+        });
+
+        return this.prisma.booking.update({
+            where: { id },
+            data: {
+                status: 'CANCELLED',
+                cancellationReason: reason || 'Khách yêu cầu hủy'
+            }
+        });
     }
 }

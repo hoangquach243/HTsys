@@ -224,19 +224,21 @@ export default function HomePage() {
             {(searched ? availability : roomTypes).map((rt: any) => {
               const price = rt.ratePlans?.[0]?.basePrice ?? rt.basePrice ?? 0;
               const isAvail = !searched || (rt.availableCount ?? 1) > 0;
-              const photos = Array.isArray(rt.photos) ? rt.photos : (typeof rt.photos === 'string' ? JSON.parse(rt.photos || '[]') : []);
-              
+              // Extract photos from rooms belonging to this room type
+              const allRoomPhotos = rt.rooms?.flatMap((r: any) => r.photos || []) || [];
+              const photos = allRoomPhotos.length > 0 ? [allRoomPhotos[0]] : [];
+
               return (
                 <div key={rt.id} className={`rounded-2xl border overflow-hidden shadow-md hover:shadow-xl transition-all bg-white group ${!isAvail ? 'opacity-60 grayscale-[30%]' : ''}`}>
                   <div className="h-56 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}22, ${accentColor}33)` }}>
                     {photos.length > 0 ? (
-                        <img src={photos[0]} alt={rt.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <img src={photos[0]} alt={rt.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                          <span className="text-6xl drop-shadow-md">🛏️</span>
-                        </div>
+                      <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                        <span className="text-6xl drop-shadow-md">🛏️</span>
+                      </div>
                     )}
-                    
+
                     {searched && (
                       <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-sm ${isAvail ? 'bg-green-500/90' : 'bg-red-500/90'}`}>
                         {isAvail ? `Còn ${rt.availableCount} phòng` : 'Hết phòng'}

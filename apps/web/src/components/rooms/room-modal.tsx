@@ -18,6 +18,7 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
     });
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -185,11 +186,19 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
                         <div className="grid grid-cols-4 gap-2 mb-2">
                             {formData.photos.map((url, idx) => (
                                 <div key={idx} className="relative group aspect-square rounded-md overflow-hidden border border-zinc-800">
-                                    <img src={url} alt="" className="w-full h-full object-cover" />
+                                    <img
+                                        src={url}
+                                        alt=""
+                                        className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform"
+                                        onClick={() => setPreviewImageUrl(url)}
+                                    />
                                     <button
                                         type="button"
-                                        onClick={() => setFormData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== idx) }))}
-                                        className="absolute top-1 right-1 bg-red-600 text-white p-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setFormData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== idx) }));
+                                        }}
+                                        className="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
                                     >
                                         <X className="w-3 h-3" />
                                     </button>
@@ -231,6 +240,25 @@ export function RoomModal({ isOpen, onClose, room, roomTypes, onSaved }: any) {
                     </DialogFooter>
                 </form>
             </DialogContent>
+
+            {/* FULL SCREEN PREVIEW */}
+            <Dialog open={!!previewImageUrl} onOpenChange={() => setPreviewImageUrl(null)}>
+                <DialogContent className="max-w-4xl p-0 bg-transparent border-none shadow-none flex items-center justify-center">
+                    <div className="relative w-full max-h-[90vh] flex items-center justify-center">
+                        <button
+                            className="absolute -top-10 right-0 text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
+                            onClick={() => setPreviewImageUrl(null)}
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img
+                            src={previewImageUrl || ''}
+                            alt="Full Preview"
+                            className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                        />
+                    </div>
+                </DialogContent>
+            </Dialog>
         </Dialog>
     );
 }

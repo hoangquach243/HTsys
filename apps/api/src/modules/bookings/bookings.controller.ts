@@ -47,8 +47,8 @@ export class BookingsController {
         return this.bookingsService.addPayment(id, body.amount, body.method, body.note, staffId);
     }
 
-    @Delete(':id')
-    delete(@Param('id') id: string) {
-        return this.bookingsService.delete(id);
+    @Post(':id/cancel')
+    cancel(@Param('id') id: string, @Body() body: { reason: string }) {
+        return this.bookingsService.cancel(id, body.reason);
     }
 }

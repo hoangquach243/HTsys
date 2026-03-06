@@ -120,7 +120,7 @@ export class FinanceService {
             };
         }
 
-        return this.prisma.expense.findMany({
+        return (this.prisma.expense as any).findMany({
             where,
             include: {
                 createdBy: { select: { name: true } }
@@ -130,7 +130,7 @@ export class FinanceService {
     }
 
     createExpense(dto: CreateExpenseDto) {
-        return this.prisma.expense.create({
+        return (this.prisma.expense as any).create({
             data: {
                 code: dto.code || `PC-${Date.now().toString().slice(-6)}`,
                 title: dto.title,

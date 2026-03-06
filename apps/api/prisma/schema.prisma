@@ -50,6 +50,8 @@ model Property {
   emailFlows     EmailFlow[]
   printTemplates PrintTemplate[]
   websiteConfig  WebsiteConfig?
+  vehicles       Vehicle[]
+  vehicleRentals VehicleRental[]
 
   @@map("properties")
 }
@@ -207,6 +209,7 @@ model Booking {
   paidAmount    Float         @default(0)
   commission    Float         @default(0)
   notes         String?
+  cancellationReason String?
   guestId       String
   propertyId    String
   createdById   String?
@@ -214,14 +217,15 @@ model Booking {
   updatedAt     DateTime      @updatedAt
 
   // Relations
-  guest         Guest          @relation(fields: [guestId], references: [id])
-  property      Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  createdBy     User?          @relation("BookingCreator", fields: [createdById], references: [id])
-  bookingRooms  BookingRoom[]
-  payments      Payment[]
-  serviceUsages ServiceUsage[]
-  tasks         Task[]
-  bookingLabels BookingLabel[]
+  guest          Guest           @relation(fields: [guestId], references: [id])
+  property       Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdBy      User?           @relation("BookingCreator", fields: [createdById], references: [id])
+  bookingRooms   BookingRoom[]
+  payments       Payment[]
+  serviceUsages  ServiceUsage[]
+  tasks          Task[]
+  bookingLabels  BookingLabel[]
+  vehicleRentals VehicleRental[]
 
   @@map("bookings")
 }
@@ -368,10 +372,12 @@ model ServiceUsage {
   bookingId String
   serviceId String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  service Service @relation(fields: [serviceId], references: [id])
+  booking       Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service       Service        @relation(fields: [serviceId], references: [id])
+  vehicleRental VehicleRental?
 
   @@map("service_usages")
 }
@@ -632,13 +638,13 @@ model PrintTemplate {
   id         String   @id @default(cuid())
   propertyId String
   name       String
-  type       String   // e.g., "invoice", "deposit"
+  type       String // e.g., "invoice", "deposit"
   content    String   @db.Text
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@unique([propertyId, type])
   @@map("print_templates")
@@ -650,7 +656,7 @@ model PrintTemplate {
 model WebsiteConfig {
   id              String   @id @default(cuid())
   propertyId      String   @unique
-  slug            String   @unique  // Used as URL identifier, e.g., "my-hotel"
+  slug            String   @unique // Used as URL identifier, e.g., "my-hotel"
   isPublished     Boolean  @default(false)
   hotelName       String?
   tagline         String?
@@ -662,9 +668,9 @@ model WebsiteConfig {
   bannerUrl       String?
   primaryColor    String   @default("#2563eb") // hex color
   accentColor     String   @default("#10b981")
-  gallery         Json?    // Array of image URLs
-  promotions      Json?    // Array of { title, description, discount, validUntil }
-  amenities       Json?    // Array of strings
+  gallery         Json? // Array of image URLs
+  promotions      Json? // Array of { title, description, discount, validUntil }
+  amenities       Json? // Array of strings
   checkInTime     String   @default("14:00")
   checkOutTime    String   @default("12:00")
   googleMapsUrl   String?
@@ -678,4 +684,75 @@ model WebsiteConfig {
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("website_configs")
+}
+
+// ============================================
+// RENTAL MODULE (Vehicles)
+// ============================================
+enum VehicleType {
+  SCOOTER // Xe tay ga
+  MANUAL // Xe số
+  OTHER
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+}
+
+enum RentalStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model Vehicle {
+  id          String        @id @default(cuid())
+  plateNumber String
+  name        String
+  provider    String? // Nhà cung cấp (nội bộ hoặc đối tác)
+  type        VehicleType   @default(SCOOTER)
+  dailyPrice  Float         @default(0)
+  status      VehicleStatus @default(AVAILABLE)
+  propertyId  String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  property Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  rentals  VehicleRental[]
+
+  @@unique([propertyId, plateNumber])
+  @@map("vehicles")
+}
+
+model VehicleRental {
+  id               String       @id @default(cuid())
+  vehicleId        String?
+  vehicleName      String? // Tên xe cho khách lẻ (gọi từ bên thứ 3)
+  plateNumber      String? // Biển số xe cho khách lẻ
+  type             VehicleType? @default(SCOOTER)
+  provider         String? // Nhà cung cấp bên thứ 3
+  bookingId        String? // Optional link to room booking
+  guestName        String? // Mandatory if bookingId is null
+  guestPhone       String?
+  startTime        DateTime // Thời gian dự kiến nhận
+  endTime          DateTime // Thời gian dự kiến trả
+  actualPickupTime DateTime? // Thời gian nhận xe thực tế
+  actualReturnTime DateTime? // Thời gian trả xe thực tế
+  pricePerDay      Float // Negotiated price
+  totalAmount      Float
+  status           RentalStatus @default(ACTIVE)
+  notes            String?
+  propertyId       String
+  serviceUsageId   String?      @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  vehicle      Vehicle?      @relation(fields: [vehicleId], references: [id])
+  booking      Booking?      @relation(fields: [bookingId], references: [id])
+  property     Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  serviceUsage ServiceUsage? @relation(fields: [serviceUsageId], references: [id], onDelete: SetNull)
+
+  @@map("vehicle_rentals")
 }

@@ -5,22 +5,31 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class DashboardService {
     constructor(private prisma: PrismaService) { }
 
-    async getDashboardSummary(propertyId: string) {
+    async getDashboardSummary(propertyId: string, startDate?: string, endDate?: string) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(today.getDate() - 29);
-        thirtyDaysAgo.setHours(0, 0, 0, 0);
+        const targetEndDate = endDate ? new Date(endDate) : new Date(today);
+        targetEndDate.setHours(23, 59, 59, 999);
+
+        const targetStartDate = startDate ? new Date(startDate) : new Date(targetEndDate);
+        if (!startDate) {
+            targetStartDate.setDate(targetEndDate.getDate() - 29); // Default to last 30 days including today
+        }
+        targetStartDate.setHours(0, 0, 0, 0);
 
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        // Fetch bookings for the last 30 days
+        // Calculate exact total days covered in filter
+        const diffTime = Math.abs(targetEndDate.getTime() - targetStartDate.getTime());
+        const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        // Fetch bookings for the dynamic date range
         const recentBookings = await this.prisma.booking.findMany({
             where: {
                 propertyId,
-                createdAt: { gte: thirtyDaysAgo },
+                createdAt: { gte: targetStartDate, lte: targetEndDate },
                 status: {
                     in: ['CONFIRMED', 'CHECKED_IN', 'CHECKED_OUT']
                 }
@@ -37,14 +46,14 @@ export class DashboardService {
         let serviceRevenue = 0;
         let totalBookings = recentBookings.length;
         let totalRoomsInSystem = await this.prisma.room.count({ where: { roomType: { propertyId } } });
-        // Assume total 30 days of available nights = 30 * totalRooms
-        let availableNights = totalRoomsInSystem * 30;
+        // Assume total days of available nights = totalDays * totalRooms
+        let availableNights = totalRoomsInSystem * totalDays;
         let soldNights = 0;
 
-        // Daily chart data (last 30 days)
+        // Daily chart data
         const dailyDataMap = new Map();
-        for (let i = 0; i < 30; i++) {
-            const d = new Date(thirtyDaysAgo);
+        for (let i = 0; i < totalDays; i++) {
+            const d = new Date(targetStartDate);
             d.setDate(d.getDate() + i);
             const dateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
             dailyDataMap.set(dateStr, { date: dateStr, revenue: 0, occupancy: 0, soldNights: 0 });
@@ -87,7 +96,7 @@ export class DashboardService {
         const cancelledBookings = await this.prisma.booking.count({
             where: {
                 propertyId,
-                createdAt: { gte: thirtyDaysAgo },
+                createdAt: { gte: targetStartDate, lte: targetEndDate },
                 status: 'CANCELLED'
             }
         });

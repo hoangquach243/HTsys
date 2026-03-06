@@ -298,25 +298,29 @@ export default function CalendarPage() {
         }
     };
 
-    const handleDeleteBooking = async () => {
+    const handleCancelBooking = async () => {
         if (!selectedBooking) return;
-        if (!window.confirm("Bạn có chắc chắn muốn xóa đơn đặt phòng này? Hành động này không thể hoàn tác.")) return;
+
+        const reason = window.prompt("Nhập lý do hủy phòng:");
+        if (reason === null) return; // User clicked Cancel in prompt
 
         try {
-            const res = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}`, {
-                method: 'DELETE'
+            const res = await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}/cancel`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reason })
             });
 
             if (res.ok) {
                 setSelectedBooking(null);
                 refreshData();
-                alert("Đã xóa Đặt phòng thành công");
+                alert("Đã hủy đơn đặt phòng thành công");
             } else {
                 const err = await res.json();
-                alert("Lỗi khi xóa: " + err.message);
+                alert("Lỗi khi hủy: " + err.message);
             }
         } catch (error) {
-            alert("Lỗi mạng khi xóa");
+            alert("Lỗi mạng khi hủy");
         }
     };
 
@@ -910,6 +914,9 @@ export default function CalendarPage() {
                                             <p><strong className="text-zinc-400 w-32 inline-block">Khách hàng:</strong> <span className="text-blue-400 font-medium">{selectedBooking.guest?.name || 'Walk-in'} ({selectedBooking.guest?.phone || 'Chưa cập nhật'})</span></p>
                                             <p><strong className="text-zinc-400 w-32 inline-block">Nguồn:</strong> <span className="uppercase text-white font-medium">{selectedBooking.source === 'walk-in' ? 'Khách lẻ / Trực tiếp' : selectedBooking.source}</span></p>
                                             <p><strong className="text-zinc-400 w-32 inline-block">TG Tạo đơn:</strong> <span className="text-zinc-300">{format(new Date(selectedBooking.createdAt || new Date()), "HH:mm - dd/MM/yyyy")}</span></p>
+                                            {selectedBooking.status === 'CANCELLED' && selectedBooking.cancellationReason && (
+                                                <p><strong className="text-red-400 w-32 inline-block">Lý do hủy:</strong> <span className="text-red-300 font-medium italic">{selectedBooking.cancellationReason}</span></p>
+                                            )}
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2">
@@ -1151,8 +1158,8 @@ export default function CalendarPage() {
                                         </>
                                     ) : (
                                         <>
-                                            <Button variant="outline" className="bg-zinc-900 border-red-900/50 text-red-400 hover:bg-red-900/20" onClick={() => handleDeleteBooking()}>
-                                                Xóa đơn
+                                            <Button variant="outline" className="bg-zinc-900 border-red-900/50 text-red-400 hover:bg-red-900/20" onClick={() => handleCancelBooking()}>
+                                                Hủy đơn
                                             </Button>
                                             <Button variant="outline" className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white" onClick={() => setIsEditingBooking(false)}>Hủy</Button>
                                             <Button variant="secondary" className="bg-zinc-800 text-white hover:bg-zinc-700" onClick={() => handleSaveBookingEdit()}>Lưu thay đổi</Button>

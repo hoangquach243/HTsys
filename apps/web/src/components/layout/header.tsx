@@ -13,6 +13,18 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 export function Header() {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return (
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl px-6">
+            <div className="flex-1"></div>
+        </header>
+    );
+
     return (
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl px-6">
             {/* Search */}

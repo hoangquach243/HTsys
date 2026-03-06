@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,7 @@ import { toast } from 'sonner';
 const TEST_PROPERTY_ID = 'clouq2m1q00003b6w5z8s6xy9';
 
 export default function BookingsPage() {
+    const router = useRouter();
     const [bookings, setBookings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -206,7 +208,7 @@ export default function BookingsPage() {
                             ) : bookings.map((booking) => {
                                 const statusInfo = getStatusColor(booking.status);
                                 return (
-                                    <TableRow key={booking.id} className="border-zinc-800 hover:bg-zinc-800/50 transition-colors cursor-pointer">
+                                    <TableRow key={booking.id} className="border-zinc-800 hover:bg-zinc-800/50 transition-colors cursor-pointer" onClick={() => router.push(`/dashboard/bookings/${booking.id}`)}>
                                         <TableCell className="font-medium text-white">{booking.code}</TableCell>
                                         <TableCell>
                                             <div className="flex flex-col">
@@ -246,12 +248,12 @@ export default function BookingsPage() {
                                         <TableCell>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white" onClick={(e) => e.stopPropagation()}>
                                                         <MoreHorizontal className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-zinc-300">
-                                                    <DropdownMenuItem className="focus:bg-zinc-800 focus:text-white cursor-pointer" onClick={() => handleOpenServiceModal(booking)}>
+                                                    <DropdownMenuItem className="focus:bg-zinc-800 focus:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); handleOpenServiceModal(booking); }}>
                                                         <ConciergeBell className="mr-2 h-4 w-4" /> Thêm Dịch vụ
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>

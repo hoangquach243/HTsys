@@ -17,6 +17,7 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { WebsiteModule } from './modules/website/website.module';
 import { MediaModule } from './modules/media/media.module';
+import { RentalsModule } from './modules/rentals/rentals.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { MediaModule } from './modules/media/media.module';
     DashboardModule,
     WebsiteModule,
     MediaModule,
+    RentalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

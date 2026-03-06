@@ -100,4 +100,8 @@ export class UpdateBookingDto {
     @IsOptional()
     @IsString()
     roomId?: string;
+
+    @IsOptional()
+    @IsString()
+    cancellationReason?: string;
 }

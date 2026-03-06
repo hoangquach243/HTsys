@@ -41,7 +41,14 @@ export default function WebsitePage() {
         fetch(`${API_URL}/api/website/config/${PROPERTY_ID}`)
             .then(r => r.ok ? r.json() : null)
             .then(data => {
-                if (data) setConfig({ ...defaultConfig, ...data });
+                if (data) {
+                    setConfig({
+                        ...defaultConfig,
+                        ...data,
+                        amenities: Array.isArray(data.amenities) ? data.amenities : defaultConfig.amenities,
+                        promotions: Array.isArray(data.promotions) ? data.promotions : defaultConfig.promotions
+                    });
+                }
             })
             .catch(console.error)
             .finally(() => setLoading(false));
@@ -180,20 +187,20 @@ export default function WebsitePage() {
                             <CardHeader><CardTitle className="text-white text-base">Tiện ích</CardTitle></CardHeader>
                             <CardContent>
                                 <div className="flex flex-wrap gap-2 mb-4">
-                                    {config.amenities.map((a, i) => (
+                                    {(config.amenities || []).map((a, i) => (
                                         <span key={i} className="flex items-center gap-1 bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-full text-sm">
                                             {a}
-                                            <button onClick={() => setConfig({ ...config, amenities: config.amenities.filter((_, idx) => idx !== i) })}
+                                            <button onClick={() => setConfig({ ...config, amenities: (config.amenities || []).filter((_, idx) => idx !== i) })}
                                                 className="text-zinc-500 hover:text-red-400 ml-1">×</button>
                                         </span>
                                     ))}
                                 </div>
                                 <div className="flex gap-2">
                                     <input value={newAmenity} onChange={e => setNewAmenity(e.target.value)}
-                                        onKeyDown={e => e.key === 'Enter' && newAmenity && (setConfig({ ...config, amenities: [...config.amenities, newAmenity] }), setNewAmenity(''))}
+                                        onKeyDown={e => e.key === 'Enter' && newAmenity && (setConfig({ ...config, amenities: [...(config.amenities || []), newAmenity] }), setNewAmenity(''))}
                                         placeholder="Thêm tiện ích..." className="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none" />
                                     <Button size="sm" variant="outline" className="bg-zinc-900 border-zinc-700 text-zinc-300" onClick={() => {
-                                        if (newAmenity) { setConfig({ ...config, amenities: [...config.amenities, newAmenity] }); setNewAmenity(''); }
+                                        if (newAmenity) { setConfig({ ...config, amenities: [...(config.amenities || []), newAmenity] }); setNewAmenity(''); }
                                     }}>
                                         <Plus className="w-4 h-4" />
                                     </Button>
